@@ -7,8 +7,10 @@ namespace PEA_TSP_1
 {
     public class Graph
     {
-        private int[,] _graph;
-        private int _numberOfCities;
+        private readonly int[,] _graph;
+        private readonly int _numberOfCities;
+
+        public int NumberOfCities => _numberOfCities;
 
         public Graph(int numberOfCities)
         {
@@ -50,17 +52,6 @@ namespace PEA_TSP_1
         {
             return _graph[x, y];
         }
-
-        public void Write()
-        {
-            for (int i = 0; i < _numberOfCities; i++)
-            {
-                for (int j = 0; j < _numberOfCities; j++)
-                {
-                    Console.Write(_graph[i,j] + " ");
-                }
-                Console.Write(Environment.NewLine);
-            }
-        }
+    
     }
 }
