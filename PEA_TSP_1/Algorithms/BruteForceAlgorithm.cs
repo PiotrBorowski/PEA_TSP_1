@@ -5,27 +5,24 @@ using System.Text;
 
 namespace PEA_TSP_1.Algorithms
 {
-    class BruteForceAlgorithm
+    class BruteForceAlgorithm : IAlgorithm
     {
         private readonly Graph _graph;
-        private List<AlgorithmResult> _results;
+        private AlgorithmResult _result;
 
-        public AlgorithmResult Result => _results.OrderBy(x => x.Weight).FirstOrDefault();
+        public AlgorithmResult Result => _result;
 
         public BruteForceAlgorithm(Graph graph)
         {
             _graph = graph;
-            _results = new List<AlgorithmResult>();
         }
 
         public void Invoke()
         {
-            //TODO: getting graph verticies
-            int[] array = {1, 2, 3};
-            heapPermutation(array, array.Length, ref _results);
+            heapPermutation(_graph.Vertices, _graph.NumberOfCities);
         }
 
-        private void heapPermutation(int[] array, int size, ref List<AlgorithmResult> results)
+        private void heapPermutation(int[] array, int size)
         {
             if (size == 1)
             {
@@ -41,16 +38,27 @@ namespace PEA_TSP_1.Algorithms
                 var resultPath = array.ToList();
                 resultPath.Add(array[0]);
 
-                results.Add(new AlgorithmResult()
+                if (_result == null)
                 {
-                    Weight = totalWeight,
-                    Path = resultPath
-                });
+                    _result = new AlgorithmResult()
+                    {
+                        Weight = totalWeight,
+                        Path = resultPath
+                    };
+                }
+                else
+                {
+                    if (_result.Weight > totalWeight)
+                    {
+                        _result.Weight = totalWeight;
+                        _result.Path = resultPath;
+                    }
+                }
             }
 
             for (int i = 0; i < size; i++)
             {
-                heapPermutation(array, size-1, ref results);
+                heapPermutation(array, size-1);
 
                 if (size % 2 == 1)
                 {

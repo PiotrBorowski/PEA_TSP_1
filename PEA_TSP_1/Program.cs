@@ -8,19 +8,18 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data6.txt");
+            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data10.txt");
 
             Console.WriteLine(graph.GetWeight(1, 0));
             Write(graph);
 
-            var brute = new BruteForceAlgorithm(graph);
+            IAlgorithm brute = new BruteForceAlgorithm(graph);
             brute.Invoke();
             Console.WriteLine(brute.Result.Weight);
             foreach (var item in brute.Result.Path)
             {
                 Console.Write(item);
             }
-
 
             Console.Read();
         }

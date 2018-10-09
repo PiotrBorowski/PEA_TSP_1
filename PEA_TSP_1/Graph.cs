@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace PEA_TSP_1
@@ -9,12 +10,15 @@ namespace PEA_TSP_1
     {
         private readonly int[,] _graph;
         private readonly int _numberOfCities;
+        private readonly int[] _vertices;
 
         public int NumberOfCities => _numberOfCities;
+        public int[] Vertices => _vertices;
 
         public Graph(int numberOfCities)
         {
             _numberOfCities = numberOfCities;
+            _vertices = Enumerable.Range(0, _numberOfCities).ToArray();
             _graph = new int[numberOfCities - 1, numberOfCities - 1];
         }
 
@@ -27,6 +31,7 @@ namespace PEA_TSP_1
                     string text = sr.ReadLine();
 
                     _numberOfCities = Int32.Parse(text);
+                    _vertices = Enumerable.Range(0, _numberOfCities).ToArray();
                     _graph = new int[_numberOfCities, _numberOfCities];
 
                     for (int i = 0; i < _numberOfCities; i++)
