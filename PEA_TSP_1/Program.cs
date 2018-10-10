@@ -8,23 +8,20 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data10.txt");
-
-            Console.WriteLine(graph.GetWeight(1, 0));
+            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data6.txt");
+            Console.WriteLine(graph.GetWeight(0, 5));
             Write(graph);
 
             IAlgorithm algorithm = new BruteForceAlgorithm(graph);
             algorithm.Invoke();
-            Console.WriteLine($"Brute Force: {algorithm.Result.Weight}");
-            foreach (var item in algorithm.Result.Path)
-            {
-                Console.Write(item);
-            }
-            Console.WriteLine();
+            Console.WriteLine("Brute Force");
+            Write(algorithm);
 
-            algorithm = new HeldKarpAlgorithm(graph);
+
+            algorithm = new HeldKarpAlgorithm(graph, 0);
             algorithm.Invoke();
-            Console.WriteLine($"HeldKarp: {algorithm.Result.Weight}");
+            Console.WriteLine("Held Karp");
+            Write(algorithm);
 
             Console.Read();
         }
@@ -39,6 +36,16 @@ namespace PEA_TSP_1
                 }
                 Console.Write(Environment.NewLine);
             }
+        }
+
+        public static void Write(IAlgorithm algorithm)
+        {
+            Console.WriteLine($"{algorithm.Result.Weight}");
+            foreach (var item in algorithm.Result.Path)
+            {
+                Console.Write(item);
+            }
+            Console.WriteLine();
         }
     }
 }

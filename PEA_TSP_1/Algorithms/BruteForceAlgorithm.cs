@@ -15,14 +15,18 @@ namespace PEA_TSP_1.Algorithms
         public BruteForceAlgorithm(Graph graph)
         {
             _graph = graph;
+            _result = new AlgorithmResult
+            {
+                Weight = Int32.MaxValue
+            };
         }
 
         public void Invoke()
         {
-            heapPermutation(_graph.Vertices, _graph.NumberOfCities);
+            HeapPermutation(_graph.Vertices, _graph.NumberOfCities);
         }
 
-        private void heapPermutation(int[] array, int size)
+        private void HeapPermutation(int[] array, int size)
         {
             if (size == 1)
             {
@@ -38,27 +42,16 @@ namespace PEA_TSP_1.Algorithms
                 var resultPath = array.ToList();
                 resultPath.Add(array[0]);
 
-                if (_result == null)
+                if (_result.Weight > totalWeight)
                 {
-                    _result = new AlgorithmResult()
-                    {
-                        Weight = totalWeight,
-                        Path = resultPath
-                    };
-                }
-                else
-                {
-                    if (_result.Weight > totalWeight)
-                    {
-                        _result.Weight = totalWeight;
-                        _result.Path = resultPath;
-                    }
+                    _result.Weight = totalWeight;
+                    _result.Path = resultPath;
                 }
             }
 
             for (int i = 0; i < size; i++)
             {
-                heapPermutation(array, size-1);
+                HeapPermutation(array, size-1);
 
                 if (size % 2 == 1)
                 {

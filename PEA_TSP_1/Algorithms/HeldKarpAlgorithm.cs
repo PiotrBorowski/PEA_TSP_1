@@ -10,32 +10,41 @@ namespace PEA_TSP_1.Algorithms
     {
         private Graph _graph;
         private AlgorithmResult _result;
+        private int _startVertex;
 
         public AlgorithmResult Result => _result;
 
-        public HeldKarpAlgorithm(Graph graph)
+        public HeldKarpAlgorithm(Graph graph, int startVertex)
         {
             _graph = graph;
             _result = new AlgorithmResult();
+            _startVertex = startVertex;
         }
 
         public void Invoke()
         {
-            int startVertex = 0;
             var tempGraph = _graph.Vertices.ToHashSet();
-            tempGraph.Remove(startVertex);
+            tempGraph.Remove(_startVertex);
 
-            _result.Weight = HeldKarp(startVertex, tempGraph);
+            _result = HeldKarp(_startVertex, tempGraph);
+            _result.Path.Reverse(); //wrong side
         }
 
-        private int HeldKarp(int start, HashSet<int> verticesSet)
+        private AlgorithmResult HeldKarp(int start, HashSet<int> verticesSet)
         {
             if (!verticesSet.Any())
             {
-                return _graph.GetWeight(start, 0);
+                var result = new AlgorithmResult()
+                {
+                    Weight = _graph.GetWeight(start, _startVertex)
+                };
+                result.Path.Add(_startVertex);
+                result.Path.Add(start);
+                return result;
             }
 
             int totalWeight = Int32.MaxValue;
+            AlgorithmResult reccurResult = new AlgorithmResult();
 
             foreach (var vertex in verticesSet)
             {
@@ -44,15 +53,20 @@ namespace PEA_TSP_1.Algorithms
                 var tempSet = new HashSet<int>(verticesSet);
                 tempSet.Remove(vertex);
 
-                int otherWeight= HeldKarp(vertex, tempSet);
+                var otherResult = HeldKarp(vertex, tempSet);
 
-                int currentWeight = weight + otherWeight;
+                int currentWeight = weight + otherResult.Weight;
 
                 if (currentWeight < totalWeight)
+                {
                     totalWeight = currentWeight;
+                    reccurResult.Weight = currentWeight;
+                    reccurResult.Path = otherResult.Path;
+                    reccurResult.Path.Add(start);
+                }
             }
 
-            return totalWeight;
+            return reccurResult;
         }
     }
 }
