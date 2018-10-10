@@ -40,10 +40,7 @@ namespace PEA_TSP_1.Algorithms
             foreach (var vertex in verticesSet)
             {
                 int weight = _graph.GetWeight(start, vertex);
-                if (start == vertex)
-                {
-                    Console.WriteLine("Boom");
-                }
+
                 var tempSet = new HashSet<int>(verticesSet);
                 tempSet.Remove(vertex);
 
