@@ -13,13 +13,18 @@ namespace PEA_TSP_1
             Console.WriteLine(graph.GetWeight(1, 0));
             Write(graph);
 
-            IAlgorithm brute = new BruteForceAlgorithm(graph);
-            brute.Invoke();
-            Console.WriteLine(brute.Result.Weight);
-            foreach (var item in brute.Result.Path)
+            IAlgorithm algorithm = new BruteForceAlgorithm(graph);
+            algorithm.Invoke();
+            Console.WriteLine($"Brute Force: {algorithm.Result.Weight}");
+            foreach (var item in algorithm.Result.Path)
             {
                 Console.Write(item);
             }
+            Console.WriteLine();
+
+            algorithm = new HeldKarpAlgorithm(graph);
+            algorithm.Invoke();
+            Console.WriteLine($"HeldKarp: {algorithm.Result.Weight}");
 
             Console.Read();
         }
