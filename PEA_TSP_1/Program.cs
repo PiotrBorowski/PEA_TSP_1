@@ -14,24 +14,15 @@ namespace PEA_TSP_1
             Write(graph);
 
             IAlgorithm algorithm = new BruteForceAlgorithm(graph);
-            var sw = new Stopwatch();
-            sw.Start();
-            algorithm.Invoke();
-            sw.Stop();
 
-            Console.WriteLine("Brute Force");
-            Write(algorithm);
-            Console.WriteLine($"Time: {sw.ElapsedMilliseconds}");
+            Console.WriteLine("Brute Force:");
+            MeasureTime(algorithm);
 
-            sw.Reset();
 
             algorithm = new HeldKarpAlgorithm(graph, 0);
-            sw.Start();
-            algorithm.Invoke();
-            sw.Stop();
-            Console.WriteLine("Held Karp");
-            Write(algorithm);
-            Console.WriteLine($"Time: {sw.ElapsedMilliseconds}");
+
+            Console.WriteLine("Held Karp:");
+            MeasureTime(algorithm);
 
 
             Console.Read();
@@ -57,6 +48,17 @@ namespace PEA_TSP_1
                 Console.Write(item);
             }
             Console.WriteLine();
+        }
+
+        public static void MeasureTime(IAlgorithm algorithm)
+        {
+            var sw = new Stopwatch();
+
+            sw.Start();
+            algorithm.Invoke();
+            sw.Stop();
+            Write(algorithm);
+            Console.WriteLine($"Time: {sw.ElapsedMilliseconds}");
         }
     }
 }
