@@ -48,13 +48,13 @@ namespace PEA_TSP_1.Algorithms
 
             foreach (var vertex in verticesSet)
             {
-                int weight = _graph.GetWeight(start, vertex);
-
+                //set without current vertex
                 var tempSet = new HashSet<int>(verticesSet);
                 tempSet.Remove(vertex);
 
-                var otherResult = HeldKarp(vertex, tempSet);
-
+                AlgorithmResult otherResult = HeldKarp(vertex, tempSet);
+                
+                int weight = _graph.GetWeight(start, vertex);
                 int currentWeight = weight + otherResult.Weight;
 
                 if (currentWeight < totalWeight)
