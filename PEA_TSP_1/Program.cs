@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using PEA_TSP_1.Algorithms;
 
@@ -8,20 +9,30 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data6.txt");
+            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data10.txt");
             Console.WriteLine(graph.GetWeight(0, 5));
             Write(graph);
 
             IAlgorithm algorithm = new BruteForceAlgorithm(graph);
+            var sw = new Stopwatch();
+            sw.Start();
             algorithm.Invoke();
+            sw.Stop();
+
             Console.WriteLine("Brute Force");
             Write(algorithm);
+            Console.WriteLine($"Time: {sw.ElapsedMilliseconds}");
 
+            sw.Reset();
 
             algorithm = new HeldKarpAlgorithm(graph, 0);
+            sw.Start();
             algorithm.Invoke();
+            sw.Stop();
             Console.WriteLine("Held Karp");
             Write(algorithm);
+            Console.WriteLine($"Time: {sw.ElapsedMilliseconds}");
+
 
             Console.Read();
         }
