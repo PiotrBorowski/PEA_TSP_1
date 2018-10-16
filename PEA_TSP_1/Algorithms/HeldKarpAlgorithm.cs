@@ -8,9 +8,11 @@ namespace PEA_TSP_1.Algorithms
 {
     class HeldKarpAlgorithm : IAlgorithm
     {
-        private Graph _graph;
+        private readonly Graph _graph;
         private AlgorithmResult _result;
-        private int _startVertex;
+        private readonly int _startVertex;
+        //save set identifier and acctual result of that set
+        private readonly Dictionary<string, AlgorithmResult> _weightOfSets;
 
         public AlgorithmResult Result => _result;
 
@@ -21,10 +23,12 @@ namespace PEA_TSP_1.Algorithms
             _graph = graph;
             _result = new AlgorithmResult();
             _startVertex = startVertex;
+            _weightOfSets = new Dictionary<string, AlgorithmResult>(); 
         }
 
         public void Invoke()
         {
+            _weightOfSets.Clear();
             var tempGraph = _graph.Vertices.ToHashSet();
             tempGraph.Remove(_startVertex);
 
@@ -54,8 +58,13 @@ namespace PEA_TSP_1.Algorithms
                 var tempSet = new HashSet<int>(verticesSet);
                 tempSet.Remove(vertex);
 
-                AlgorithmResult otherResult = HeldKarp(vertex, tempSet);
-                
+                AlgorithmResult otherResult;
+                if (!_weightOfSets.TryGetValue(string.Join("",tempSet), out otherResult))
+                {
+                    otherResult = HeldKarp(vertex, tempSet);
+                    _weightOfSets.Add(string.Join("", tempSet), otherResult);
+                }
+
                 int weight = _graph.GetWeight(start, vertex);
                 int currentWeight = weight + otherResult.Weight;
 

@@ -11,22 +11,23 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data6.txt");
-            Write(graph);
+            string cities = "6";
+            var graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
+            //Write(graph);
             IAlgorithm algorithm;
 
-            algorithm = new BruteForceAlgorithm(graph) { Name = "BruteForce6" };
-            ComputeAndSave(algorithm);
+            //algorithm = new BruteForceAlgorithm(graph) { Name = "BruteForce6" };
+            //ComputeAndSave(algorithm);
 
-            algorithm = new HeldKarpAlgorithm(graph, 0){Name = "HeldKarp6"};
-            ComputeAndSave(algorithm);
+            //algorithm = new HeldKarpAlgorithm(graph, 0){Name = "HeldKarp6"};
+            //ComputeAndSave(algorithm);
 
-            graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data10.txt");
+            graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
 
-            algorithm = new BruteForceAlgorithm(graph){Name = "BruteForce10"};
-            ComputeAndSave(algorithm);
+            //algorithm = new BruteForceAlgorithm(graph) { Name = "BruteForce10" };
+            //ComputeAndSave(algorithm);
 
-            algorithm = new HeldKarpAlgorithm(graph, 0){Name = "HeldKarp10"};
+            algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
             ComputeAndSave(algorithm);
 
             Console.Read();
@@ -68,7 +69,7 @@ namespace PEA_TSP_1
         {
             using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
             {
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     writer.WriteLine(MeasureTime(algorithm));
                 }
