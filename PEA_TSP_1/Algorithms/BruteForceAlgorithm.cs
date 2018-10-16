@@ -11,6 +11,7 @@ namespace PEA_TSP_1.Algorithms
         private AlgorithmResult _result;
 
         public AlgorithmResult Result => _result;
+        public string Name { get; set; }
 
         public BruteForceAlgorithm(Graph graph)
         {

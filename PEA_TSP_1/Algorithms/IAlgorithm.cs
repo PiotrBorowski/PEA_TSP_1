@@ -3,6 +3,7 @@
     internal interface IAlgorithm
     {
         AlgorithmResult Result { get; }
+        string Name { get; set; }
         void Invoke();
     }
 }

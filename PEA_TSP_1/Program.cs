@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using PEA_TSP_1.Algorithms;
 
@@ -9,21 +11,23 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data10.txt");
-            Console.WriteLine(graph.GetWeight(0, 5));
+            var graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data6.txt");
             Write(graph);
+            IAlgorithm algorithm;
 
-            IAlgorithm algorithm = new BruteForceAlgorithm(graph);
+            algorithm = new BruteForceAlgorithm(graph) { Name = "BruteForce6" };
+            ComputeAndSave(algorithm);
 
-            Console.WriteLine("Brute Force:");
-            MeasureTime(algorithm);
+            algorithm = new HeldKarpAlgorithm(graph, 0){Name = "HeldKarp6"};
+            ComputeAndSave(algorithm);
 
+            graph = new Graph("C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data10.txt");
 
-            algorithm = new HeldKarpAlgorithm(graph, 0);
+            algorithm = new BruteForceAlgorithm(graph){Name = "BruteForce10"};
+            ComputeAndSave(algorithm);
 
-            Console.WriteLine("Held Karp:");
-            MeasureTime(algorithm);
-
+            algorithm = new HeldKarpAlgorithm(graph, 0){Name = "HeldKarp10"};
+            ComputeAndSave(algorithm);
 
             Console.Read();
         }
@@ -50,15 +54,26 @@ namespace PEA_TSP_1
             Console.WriteLine();
         }
 
-        public static void MeasureTime(IAlgorithm algorithm)
+        public static long MeasureTime(IAlgorithm algorithm)
         {
             var sw = new Stopwatch();
 
             sw.Start();
             algorithm.Invoke();
             sw.Stop();
-            Write(algorithm);
-            Console.WriteLine($"Time: {sw.ElapsedMilliseconds}");
+            return sw.ElapsedMilliseconds;
+        }
+
+        public static void ComputeAndSave(IAlgorithm algorithm)
+        {
+            using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    writer.WriteLine(MeasureTime(algorithm));
+                }
+                writer.Close();
+            }
         }
     }
 }

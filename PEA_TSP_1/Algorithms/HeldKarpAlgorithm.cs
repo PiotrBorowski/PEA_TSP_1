@@ -14,6 +14,8 @@ namespace PEA_TSP_1.Algorithms
 
         public AlgorithmResult Result => _result;
 
+        public string Name { get; set; }
+
         public HeldKarpAlgorithm(Graph graph, int startVertex)
         {
             _graph = graph;
