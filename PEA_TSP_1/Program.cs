@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -11,26 +12,22 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            string cities = "6";
+            InstanceTests(6);
+            InstanceTests(10);
+            InstanceTests(13);
+            InstanceTests(17);
+            Console.Read();
+        }
+
+        public static void InstanceTests(int cities)
+        {
             var graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
-            //Write(graph);
-            IAlgorithm algorithm;
 
-            //algorithm = new BruteForceAlgorithm(graph) { Name = "BruteForce6" };
-            //ComputeAndSave(algorithm);
-
-            //algorithm = new HeldKarpAlgorithm(graph, 0){Name = "HeldKarp6"};
-            //ComputeAndSave(algorithm);
-
-            graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
-
-            //algorithm = new BruteForceAlgorithm(graph) { Name = "BruteForce10" };
-            //ComputeAndSave(algorithm);
+            IAlgorithm algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
+            ComputeAndSave(algorithm);
 
             algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
             ComputeAndSave(algorithm);
-
-            Console.Read();
         }
 
         public static void Write(Graph graph)
@@ -55,6 +52,15 @@ namespace PEA_TSP_1
             Console.WriteLine();
         }
 
+        public static void Write(List<int> list)
+        {
+            foreach (var item in list)
+            {
+                Console.Write(item);
+            }
+            Console.WriteLine();
+        }
+
         public static long MeasureTime(IAlgorithm algorithm)
         {
             var sw = new Stopwatch();
@@ -71,7 +77,13 @@ namespace PEA_TSP_1
             {
                 for (int i = 0; i < 10; i++)
                 {
+                    Console.WriteLine();
                     writer.WriteLine(MeasureTime(algorithm));
+                    Console.WriteLine("Path:");
+                    Write(algorithm.Result.Path);
+                    Console.WriteLine("Weight:");
+                    Console.WriteLine(algorithm.Result.Weight);
+                    Console.WriteLine();
                 }
                 writer.Close();
             }

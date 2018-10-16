@@ -59,11 +59,12 @@ namespace PEA_TSP_1.Algorithms
                 tempSet.Remove(vertex);
 
                 AlgorithmResult otherResult;
-                if (!_weightOfSets.TryGetValue(string.Join("",tempSet), out otherResult))
+                if (!_weightOfSets.TryGetValue(vertex + string.Join("",tempSet), out otherResult))
                 {
                     otherResult = HeldKarp(vertex, tempSet);
-                    _weightOfSets.Add(string.Join("", tempSet), otherResult);
+                    _weightOfSets.Add(vertex + string.Join("", tempSet), otherResult);
                 }
+                Console.WriteLine(vertex + string.Join("", tempSet));
 
                 int weight = _graph.GetWeight(start, vertex);
                 int currentWeight = weight + otherResult.Weight;
