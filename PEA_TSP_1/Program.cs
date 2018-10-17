@@ -14,8 +14,7 @@ namespace PEA_TSP_1
         {
             InstanceTests(6);
             InstanceTests(10);
-            InstanceTests(13);
-            InstanceTests(17);
+            InstanceTests(12);
             Console.Read();
         }
 
@@ -77,7 +76,7 @@ namespace PEA_TSP_1
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    Console.WriteLine();
+                    Console.WriteLine(algorithm.Name);
                     writer.WriteLine(MeasureTime(algorithm));
                     Console.WriteLine("Path:");
                     Write(algorithm.Result.Path);

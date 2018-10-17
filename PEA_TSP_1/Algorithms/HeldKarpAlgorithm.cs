@@ -12,7 +12,7 @@ namespace PEA_TSP_1.Algorithms
         private AlgorithmResult _result;
         private readonly int _startVertex;
         //save set identifier and acctual result of that set
-        private readonly Dictionary<string, AlgorithmResult> _weightOfSets;
+        private readonly Dictionary<HashSet<int>, AlgorithmResult> _weightOfSets;
 
         public AlgorithmResult Result => _result;
 
@@ -23,7 +23,8 @@ namespace PEA_TSP_1.Algorithms
             _graph = graph;
             _result = new AlgorithmResult();
             _startVertex = startVertex;
-            _weightOfSets = new Dictionary<string, AlgorithmResult>(); 
+            _weightOfSets = new Dictionary<HashSet<int>, AlgorithmResult>(); 
+            
         }
 
         public void Invoke()
@@ -59,12 +60,11 @@ namespace PEA_TSP_1.Algorithms
                 tempSet.Remove(vertex);
 
                 AlgorithmResult otherResult;
-                if (!_weightOfSets.TryGetValue(vertex + string.Join("",tempSet), out otherResult))
+                if (!_weightOfSets.TryGetValue(tempSet, out otherResult))
                 {
                     otherResult = HeldKarp(vertex, tempSet);
-                    _weightOfSets.Add(vertex + string.Join("", tempSet), otherResult);
+                    _weightOfSets[tempSet] = otherResult;
                 }
-                Console.WriteLine(vertex + string.Join("", tempSet));
 
                 int weight = _graph.GetWeight(start, vertex);
                 int currentWeight = weight + otherResult.Weight;
