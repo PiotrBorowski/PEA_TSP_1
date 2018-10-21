@@ -14,6 +14,7 @@ namespace PEA_TSP_1
         {
             InstanceTests(6);
             InstanceTests(10);
+            InstanceTests(11);
             InstanceTests(12);
             Console.Read();
         }
@@ -55,7 +56,7 @@ namespace PEA_TSP_1
         {
             foreach (var item in list)
             {
-                Console.Write(item);
+                Console.Write(item + " ");
             }
             Console.WriteLine();
         }
