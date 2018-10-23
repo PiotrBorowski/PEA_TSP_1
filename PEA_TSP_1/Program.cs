@@ -12,10 +12,10 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            InstanceTests(6);
-            InstanceTests(10);
             InstanceTests(11);
             InstanceTests(12);
+            InstanceTests(13);
+
             Console.Read();
         }
 
@@ -24,7 +24,7 @@ namespace PEA_TSP_1
             var graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
 
             IAlgorithm algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
-            ComputeAndSave(algorithm);
+            //ComputeAndSave(algorithm);
 
             algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
             ComputeAndSave(algorithm);
@@ -78,11 +78,16 @@ namespace PEA_TSP_1
                 for (int i = 0; i < 10; i++)
                 {
                     Console.WriteLine(algorithm.Name);
-                    writer.WriteLine(MeasureTime(algorithm));
+                    long time = MeasureTime(algorithm);
+                    Console.WriteLine("Time");
+                    Console.WriteLine(time);
+                    writer.WriteLine(time);
+
                     Console.WriteLine("Path:");
                     Write(algorithm.Result.Path);
                     Console.WriteLine("Weight:");
                     Console.WriteLine(algorithm.Result.Weight);
+  
                     Console.WriteLine();
                 }
                 writer.Close();
