@@ -61,7 +61,7 @@ namespace PEA_TSP_1.Algorithms
                 tempSet.Remove(vertex);
 
                 AlgorithmResult otherResult;
-                if (!_weightOfSets.TryGetValue(string.Join("", tempSet), out otherResult))
+                if (!_weightOfSets.TryGetValue(string.Join("",  tempSet), out otherResult))
                 {
                     otherResult = HeldKarp(vertex, tempSet);
                     _weightOfSets[string.Join("", otherResult.Path)] = otherResult;

@@ -12,6 +12,10 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
+            InstanceTests(8);
+            InstanceTests(9);
+            InstanceTests(10);
+
             InstanceTests(11);
             InstanceTests(12);
             InstanceTests(13);
