@@ -12,7 +12,7 @@ namespace PEA_TSP_1.Algorithms
         private AlgorithmResult _result;
         private readonly int _startVertex;
         //save set identifier and acctual result of that set
-        private readonly Dictionary<string, AlgorithmResult> _weightOfSets;
+        private readonly Dictionary<string, int> _weightOfSets;
         //private readonly Dictionary<HashSet<int>, AlgorithmResult> _weightOfSets;
 
         public AlgorithmResult Result => _result;
@@ -24,8 +24,7 @@ namespace PEA_TSP_1.Algorithms
             _graph = graph;
             _result = new AlgorithmResult();
             _startVertex = startVertex;
-            _weightOfSets = new Dictionary<string, AlgorithmResult>(); 
-            
+            _weightOfSets = new Dictionary<string, int>();            
         }
 
         public void Invoke()
@@ -52,20 +51,31 @@ namespace PEA_TSP_1.Algorithms
             }
 
             int totalWeight = Int32.MaxValue;
-            AlgorithmResult reccurResult = new AlgorithmResult();
+            var reccurResult = new AlgorithmResult();
 
             foreach (var vertex in verticesSet)
             {
                 //set without current vertex
                 var tempSet = new HashSet<int>(verticesSet);
                 tempSet.Remove(vertex);
+                var otherResult = new AlgorithmResult();
 
-                AlgorithmResult otherResult;
-                if (!_weightOfSets.TryGetValue(string.Join("",  tempSet), out otherResult))
+                string Path = $"{_startVertex},{vertex}," + string.Join(",", tempSet);
+
+                if (!_weightOfSets.TryGetValue(Path,  out var weightFromMemory))
                 {
                     otherResult = HeldKarp(vertex, tempSet);
-                    _weightOfSets[string.Join("", otherResult.Path)] = otherResult;
+                    _weightOfSets[string.Join(",", otherResult.Path)] = otherResult.Weight;
                 }
+                else
+                {
+                    otherResult.Weight = weightFromMemory;
+                    otherResult.Path = new List<int>();
+                    otherResult.Path.Add(_startVertex);
+                    otherResult.Path.Add(vertex);
+                    otherResult.Path.AddRange(tempSet);
+                }
+
 
                 int weight = _graph.GetWeight(start, vertex);
                 int currentWeight = weight + otherResult.Weight;
