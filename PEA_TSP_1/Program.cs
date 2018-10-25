@@ -11,12 +11,13 @@ namespace PEA_TSP_1
     class Program
     {
         static void Main(string[] args)
-        {
-
-            InstanceTests(13);
-            InstanceTests(15);
-
-
+        { 
+            InstanceTests(6);
+            InstanceTests(8);
+            InstanceTests(9);
+            InstanceTests(10);
+            InstanceTests(11);
+            InstanceTests(12);
 
             Console.Read();
         }
@@ -25,8 +26,10 @@ namespace PEA_TSP_1
         {
             var graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
 
+            Write(graph);
+
             IAlgorithm algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
-            //ComputeAndSave(algorithm);
+            ComputeAndSave(algorithm);
 
             algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
             ComputeAndSave(algorithm);
@@ -89,7 +92,7 @@ namespace PEA_TSP_1
                     Write(algorithm.Result.Path);
                     Console.WriteLine("Weight:");
                     Console.WriteLine(algorithm.Result.Weight);
-  
+
                     Console.WriteLine();
                 }
                 writer.Close();
