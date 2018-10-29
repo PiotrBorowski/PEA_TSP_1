@@ -27,6 +27,13 @@ namespace PEA_TSP_1.Algorithms
             HeapPermutation(_graph.Vertices, _graph.NumberOfCities);
         }
 
+        private void swap(int[] array, int i, int j)
+        {
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+
         private void HeapPermutation(int[] array, int size)
         {
             if (size == 1)
@@ -56,15 +63,11 @@ namespace PEA_TSP_1.Algorithms
 
                 if (size % 2 == 1)
                 {
-                    int temp = array[0];
-                    array[0] = array[size - 1];
-                    array[size - 1] = temp;
+                    swap(array, 0, size - 1);
                 }
                 else
                 {
-                    int temp = array[i];
-                    array[i] = array[size - 1];
-                    array[size - 1] = temp;
+                    swap(array, i, size - 1);
                 }
             }
         }

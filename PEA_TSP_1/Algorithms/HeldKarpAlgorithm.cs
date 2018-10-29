@@ -37,16 +37,16 @@ namespace PEA_TSP_1.Algorithms
              _result.Path.Reverse();
         }
 
-        private AlgorithmResult HeldKarp(int start, HashSet<int> verticesSet)
+        private AlgorithmResult HeldKarp(int end, HashSet<int> verticesSet)
         {
             if (!verticesSet.Any())
             {
                 var result = new AlgorithmResult()
                 {
-                    Weight = _graph.GetWeight(start, _startVertex)
+                    Weight = _graph.GetWeight(end, _startVertex)
                 };
                 result.Path.Add(_startVertex);
-                result.Path.Add(start);
+                result.Path.Add(end);
                 return result;
             }
 
@@ -84,7 +84,7 @@ namespace PEA_TSP_1.Algorithms
                     otherResult.Path.Add(vertex);
                 }
 
-                int weight = _graph.GetWeight(start, vertex);
+                int weight = _graph.GetWeight(end, vertex);
                 int currentWeight = weight + otherResult.Weight;
 
                 if (currentWeight < totalWeight)
@@ -92,7 +92,7 @@ namespace PEA_TSP_1.Algorithms
                     totalWeight = currentWeight;
                     reccurResult.Weight = currentWeight;
                     reccurResult.Path = otherResult.Path;
-                    reccurResult.Path.Add(start);
+                    reccurResult.Path.Add(end);
                 }
             }
 

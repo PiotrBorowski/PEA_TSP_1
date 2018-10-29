@@ -12,12 +12,7 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         { 
-            InstanceTests(6);
-            InstanceTests(8);
-            InstanceTests(9);
             InstanceTests(10);
-            InstanceTests(11);
-            InstanceTests(12);
 
             Console.Read();
         }
@@ -32,7 +27,7 @@ namespace PEA_TSP_1
             ComputeAndSave(algorithm);
 
             algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
-            ComputeAndSave(algorithm);
+            //ComputeAndSave(algorithm);
         }
 
         public static void Write(Graph graph)
@@ -78,15 +73,15 @@ namespace PEA_TSP_1
 
         public static void ComputeAndSave(IAlgorithm algorithm)
         {
-            using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
-            {
+            //using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
+            //{
                 for (int i = 0; i < 10; i++)
                 {
                     Console.WriteLine(algorithm.Name);
                     long time = MeasureTime(algorithm);
                     Console.WriteLine("Time");
                     Console.WriteLine(time);
-                    writer.WriteLine(time);
+                  //  writer.WriteLine(time);
 
                     Console.WriteLine("Path:");
                     Write(algorithm.Result.Path);
@@ -94,8 +89,8 @@ namespace PEA_TSP_1
                     Console.WriteLine(algorithm.Result.Weight);
 
                     Console.WriteLine();
-                }
-                writer.Close();
+               // }
+                //writer.Close();
             }
         }
     }
