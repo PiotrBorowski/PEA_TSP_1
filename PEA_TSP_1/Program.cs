@@ -12,8 +12,7 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         { 
-            InstanceTests(10);
-
+            InstanceTests(13);
             Console.Read();
         }
 
@@ -24,10 +23,10 @@ namespace PEA_TSP_1
             Write(graph);
 
             IAlgorithm algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
-            ComputeAndSave(algorithm);
+            //ComputeAndSave(algorithm);
 
             algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
-            //ComputeAndSave(algorithm);
+            ComputeAndSave(algorithm);
         }
 
         public static void Write(Graph graph)

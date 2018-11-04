@@ -55,6 +55,8 @@ namespace PEA_TSP_1.Algorithms
                     _result.Weight = totalWeight;
                     _result.Path = resultPath;
                 }
+
+                return;
             }
 
             for (int i = 0; i < size; i++)

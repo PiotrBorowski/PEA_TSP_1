@@ -32,8 +32,6 @@ namespace PEA_TSP_1.Algorithms
             tempGraph.Remove(_startVertex);
 
             _result = HeldKarp(_startVertex, tempGraph);
-            var b = _weightOfSets;
-            //var weightres = _weightOfSets["0,5,1,9,6,7,8,2,4,3,0,"];
              _result.Path.Reverse();
         }
 
