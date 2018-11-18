@@ -11,7 +11,14 @@ namespace PEA_TSP_1
     class Program
     {
         static void Main(string[] args)
-        { 
+        {
+            InstanceTests(6);
+            InstanceTests(8);
+            InstanceTests(9);
+            InstanceTests(10);
+            InstanceTests(11);
+            InstanceTests(12);
+
             InstanceTests(13);
             Console.Read();
         }
@@ -23,7 +30,7 @@ namespace PEA_TSP_1
             Write(graph);
 
             IAlgorithm algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
-            //ComputeAndSave(algorithm);
+            ComputeAndSave(algorithm);
 
             algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
             ComputeAndSave(algorithm);
@@ -74,7 +81,7 @@ namespace PEA_TSP_1
         {
             //using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
             //{
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     Console.WriteLine(algorithm.Name);
                     long time = MeasureTime(algorithm);

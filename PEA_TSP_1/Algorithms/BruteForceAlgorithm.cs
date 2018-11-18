@@ -40,13 +40,15 @@ namespace PEA_TSP_1.Algorithms
             {
                 int totalWeight = 0;
 
+                //pobieramy całą wagę drogi
                 for (int i = 0; i < array.Length - 1; i++)
                 {
                     totalWeight += _graph.GetWeight(array[i], array[i + 1]);
                 }
-                //weight of path between last vertex and source
+                //waga pomiedzy ostatnim a pierwszym
                 totalWeight += _graph.GetWeight(array[array.Length - 1], array[0]);
 
+                //droga
                 var resultPath = array.ToList();
                 resultPath.Add(array[0]);
 

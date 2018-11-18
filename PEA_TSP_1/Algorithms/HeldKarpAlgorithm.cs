@@ -39,6 +39,7 @@ namespace PEA_TSP_1.Algorithms
         {
             if (!verticesSet.Any())
             {
+                //jezeli zbior jest pusty to zwracamy wynik dla wierzchołka końcowego dla danego wywołania i startowego globalnego
                 var result = new AlgorithmResult()
                 {
                     Weight = _graph.GetWeight(end, _startVertex)
@@ -53,12 +54,13 @@ namespace PEA_TSP_1.Algorithms
 
             foreach (var vertex in verticesSet)
             {
-                //set without current vertex
+                //zbior bez obecnego wierzchołka
                 var tempSet = new HashSet<int>(verticesSet);
                 tempSet.Remove(vertex);
                 var otherResult = new AlgorithmResult();
                 string Path;
 
+                //sciezka
                 Path = $"{_startVertex},";
                 if (tempSet.Any())
                 {
@@ -66,15 +68,18 @@ namespace PEA_TSP_1.Algorithms
                 }               
                 Path += $"{vertex},";
 
+                //jezeli waga dla sciezki bez obecnego wierzchołka znajduje sie w słowniku to ja pobieramy
                 if (!_weightOfSets.TryGetValue(Path, out var weightFromMemory))
                 {
+                    //jezeli nie to wywołujemy rekurencję
                     otherResult = HeldKarp(vertex, tempSet);
-
+                    //i zapisujemy do słownika
                     var innerPath = string.Join(",", otherResult.Path) + ",";
                     _weightOfSets[innerPath] = otherResult.Weight;
                 }
                 else
                 {
+                    //jezeli jest w słowniku to przepisujemy wagę
                     otherResult.Weight = weightFromMemory;
                     otherResult.Path = new List<int>();
                     otherResult.Path.Add(_startVertex);        
@@ -83,8 +88,10 @@ namespace PEA_TSP_1.Algorithms
                 }
 
                 int weight = _graph.GetWeight(end, vertex);
+                //waga całego cyklu
                 int currentWeight = weight + otherResult.Weight;
 
+                //jezeli jest to najkrótsza z dotychczasowych sciezek to ja zapisuje do rozwiazania koncowego
                 if (currentWeight < totalWeight)
                 {
                     totalWeight = currentWeight;
