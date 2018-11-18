@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PEA_TSP_1.Algorithms
 {
-    class AlgorithmResult
+    public class AlgorithmResult
     {
         public AlgorithmResult()
         {
