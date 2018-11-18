@@ -13,7 +13,7 @@ namespace PEA_TSP_1.Algorithms
 
         private Queue<Move> tabuList;
         private StopCondition stopCondition;
-        private int maxTabuSize = 250;
+        private int maxTabuSize = 50;
         private Graph _graph;
 
         public TabuSearchAlgorithm(Graph graph)
@@ -40,7 +40,7 @@ namespace PEA_TSP_1.Algorithms
             TabuAlgorithmResult bestSolution = initialSolution;
             TabuAlgorithmResult currentSolution = initialSolution;
             tabuList = new Queue<Move>();
-            stopCondition.MaxIterations = 50000;
+            stopCondition.MaxIterations = 5000;
 
             int currentIteration = 0;
             while (!stopCondition.mustStop(++currentIteration))
@@ -71,28 +71,31 @@ namespace PEA_TSP_1.Algorithms
         {
             int bestCost = Int32.MaxValue;
             move = new Move(0,0);
-            TabuAlgorithmResult result = new TabuAlgorithmResult();
+            TabuAlgorithmResult bestResult = new TabuAlgorithmResult();
             var pathList = new List<int>(currentSolution.Path);
 
             for (int i = 0; i < currentSolution.Path.Count; i++)
             {
                 for (int j = 1; j < currentSolution.Path.Count; j++)
                 {
-                    if (j != i)
+                    var currMove = new Move(i, j);
+                    if (j != i && !tabuMoves.Contains(currMove))
                     {
-                        result.Path = Swap(i, j, pathList);
-                        var currMove = new Move(i,j);
-                        int currCost = result.CalculateWeight(_graph);
-                        if (currCost < bestCost && !tabuMoves.Contains(currMove))
+                        TabuAlgorithmResult temp = new TabuAlgorithmResult();
+                        temp.Path = Swap(i, j, pathList);
+                        int currCost = temp.CalculateWeight(_graph);
+
+                        if (currCost < bestCost)
                         {
                             bestCost = currCost;
                             move = currMove;
+                            bestResult = temp;
                         }
                     }
                 }
             }
 
-            return result;
+            return bestResult;
         }
 
         public List<int> Swap(int x, int y, List<int> path)
