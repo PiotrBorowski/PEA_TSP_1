@@ -8,42 +8,53 @@ namespace PEA_TSP_1.Algorithms
 {
     public class TabuSearchAlgorithm : IAlgorithm
     {
-        public AlgorithmResult Result { get; }
+        public AlgorithmResult Result { get; set; }
         public string Name { get; set; }
 
-        private Queue<TabuAlgorithmResult> tabuList;
+        private Queue<Move> tabuList;
         private StopCondition stopCondition;
-        private BestNeighborSolutionLocator solutionLocator;
-        private int maxTabuSize = 10;
+        private int maxTabuSize = 30;
+        private Graph _graph;
+
+        public TabuSearchAlgorithm(Graph graph)
+        {
+            _graph = graph;
+            stopCondition = new StopCondition();
+        }
 
         public void Invoke()
         {
+            var init = new TabuAlgorithmResult()
+            {
+                Path = new List<int> { 0,1,2,3,4,5,6,7,8,9},
+                Weight = 999
+            };
 
+            var result = TabuSearch(init);
 
+            Result = new AlgorithmResult{Path = result.Path, Weight = result.Weight};
         }
 
         public TabuAlgorithmResult TabuSearch(TabuAlgorithmResult initialSolution)
         {
             TabuAlgorithmResult bestSolution = initialSolution;
             TabuAlgorithmResult currentSolution = initialSolution;
-            tabuList = new Queue<TabuAlgorithmResult>();
-            tabuList.Enqueue(initialSolution);
+            tabuList = new Queue<Move>();
+            stopCondition.MaxIterations = 50000;
 
             int currentIteration = 0;
-            while (!stopCondition.mustStop(++currentIteration, bestSolution))
+            while (!stopCondition.mustStop(++currentIteration))
             {
-
-                List<TabuAlgorithmResult> candidateNeighbors = currentSolution.Neighbors;
-                List<TabuAlgorithmResult> solutionsInTabu = tabuList.ToList();
-
-                TabuAlgorithmResult bestNeighborFound = solutionLocator.FindBestNeighbor(candidateNeighbors, solutionsInTabu);
+                TabuAlgorithmResult bestNeighborFound =
+                    FindBestNeighbor(currentSolution, tabuList.ToList(), out var move);
 
                 if (bestNeighborFound.Weight < bestSolution.Weight)
                 {
                     bestSolution = bestNeighborFound;
                 }
 
-                tabuList.Enqueue(bestNeighborFound);
+                tabuList.Enqueue(move);
+                currentSolution = bestNeighborFound;
 
                 if (tabuList.Count > maxTabuSize)
                 {
@@ -52,21 +63,41 @@ namespace PEA_TSP_1.Algorithms
             }
 
             return bestSolution;
-        }    
-    }
+        }
 
-}
 
-    internal class BestNeighborSolutionLocator
-    {
-        public TabuAlgorithmResult FindBestNeighbor(List<TabuAlgorithmResult> neighbors, List<TabuAlgorithmResult> tabuNeighbors)
+        public TabuAlgorithmResult FindBestNeighbor(TabuAlgorithmResult currentSolution, List<Move> tabuMoves,
+            out Move move)
         {
-            foreach (var item in tabuNeighbors)
+            int bestCost = Int32.MaxValue;
+            move = new Move(0,0);
+            for (int i = 0; i < currentSolution.Path.Count; i++)
             {
-                neighbors.Remove(item);
+                for (int j = 1; j < currentSolution.Path.Count; j++)
+                {
+                    if (j != i)
+                    {
+                        currentSolution = Swap(i, j, currentSolution);
+                        move = new Move(i,j);
+                        int currCost = currentSolution.CalculateWeight(_graph);
+                        if (currCost < bestCost && !tabuMoves.Contains(move))
+                        {
+                            bestCost = currCost;
+                        }
+                    }
+                }
             }
 
-            return neighbors.OrderBy(x => x.Weight).First();
+            return currentSolution;
+        }
+
+        public TabuAlgorithmResult Swap(int x, int y, TabuAlgorithmResult solution)
+        {
+            int temp = solution.Path[x];
+            solution.Path[x] = solution.Path[y];
+            solution.Path[y] = temp;
+
+            return solution;
         }
     }
 
@@ -74,15 +105,39 @@ namespace PEA_TSP_1.Algorithms
     {
         public int MaxIterations { get; set; }
 
-        public bool mustStop(int current, TabuAlgorithmResult bestResult)
+        public bool mustStop(int current)
         {
             return current >= MaxIterations;
         }
     }
 
-
     public class TabuAlgorithmResult : AlgorithmResult
     {
-        public List<TabuAlgorithmResult> Neighbors { get; set; }
+        public int CalculateWeight(Graph _graph)
+        {
+            int best = 0;
+            for (int i = 0; i < _graph.NumberOfCities-1; i++)
+            {
+                best += _graph.GetWeight(Path[i],Path[i+1]);
+            }
+            best += _graph.GetWeight(Path[_graph.NumberOfCities - 1], 0);
+
+            Weight = best;
+            return best;
+        }
     }
+
+    public class Move
+    {
+        public int Vertex1 { get; set; }
+        public int Vertex2 { get; set; }
+
+        public Move(int v1, int v2)
+        {
+            Vertex1 = v1;
+            Vertex2 = v2;
+        }
+    }
+}
+
 
