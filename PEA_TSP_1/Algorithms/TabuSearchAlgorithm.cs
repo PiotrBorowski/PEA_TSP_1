@@ -13,7 +13,7 @@ namespace PEA_TSP_1.Algorithms
 
         private Queue<Move> tabuList;
         private StopCondition stopCondition;
-        private int maxTabuSize = 30;
+        private int maxTabuSize = 250;
         private Graph _graph;
 
         public TabuSearchAlgorithm(Graph graph)
@@ -71,33 +71,37 @@ namespace PEA_TSP_1.Algorithms
         {
             int bestCost = Int32.MaxValue;
             move = new Move(0,0);
+            TabuAlgorithmResult result = new TabuAlgorithmResult();
+            var pathList = new List<int>(currentSolution.Path);
+
             for (int i = 0; i < currentSolution.Path.Count; i++)
             {
                 for (int j = 1; j < currentSolution.Path.Count; j++)
                 {
                     if (j != i)
                     {
-                        currentSolution = Swap(i, j, currentSolution);
-                        move = new Move(i,j);
-                        int currCost = currentSolution.CalculateWeight(_graph);
-                        if (currCost < bestCost && !tabuMoves.Contains(move))
+                        result.Path = Swap(i, j, pathList);
+                        var currMove = new Move(i,j);
+                        int currCost = result.CalculateWeight(_graph);
+                        if (currCost < bestCost && !tabuMoves.Contains(currMove))
                         {
                             bestCost = currCost;
+                            move = currMove;
                         }
                     }
                 }
             }
 
-            return currentSolution;
+            return result;
         }
 
-        public TabuAlgorithmResult Swap(int x, int y, TabuAlgorithmResult solution)
+        public List<int> Swap(int x, int y, List<int> path)
         {
-            int temp = solution.Path[x];
-            solution.Path[x] = solution.Path[y];
-            solution.Path[y] = temp;
+            int temp = path[x];
+            path[x] = path[y];
+            path[y] = temp;
 
-            return solution;
+            return path;
         }
     }
 
@@ -115,15 +119,15 @@ namespace PEA_TSP_1.Algorithms
     {
         public int CalculateWeight(Graph _graph)
         {
-            int best = 0;
+            int weight = 0;
             for (int i = 0; i < _graph.NumberOfCities-1; i++)
             {
-                best += _graph.GetWeight(Path[i],Path[i+1]);
+                weight += _graph.GetWeight(Path[i],Path[i+1]);
             }
-            best += _graph.GetWeight(Path[_graph.NumberOfCities - 1], 0);
+            weight += _graph.GetWeight(Path[_graph.NumberOfCities - 1], 0);
 
-            Weight = best;
-            return best;
+            Weight = weight;
+            return weight;
         }
     }
 
