@@ -13,7 +13,7 @@ namespace PEA_TSP_1.Algorithms
 
         private Queue<Move> tabuList;
         private StopCondition stopCondition;
-        private int maxTabuSize = 50;
+        private int maxTabuSize = 25;
         private Graph _graph;
 
         public TabuSearchAlgorithm(Graph graph)
@@ -26,8 +26,8 @@ namespace PEA_TSP_1.Algorithms
         {
             var init = new TabuAlgorithmResult()
             {
-                Path = new List<int> { 0,1,2,3,4,5,6,7,8,9},
-                Weight = 999
+                Path = Enumerable.Range(0, _graph.NumberOfCities).ToList(),
+                Weight = Int32.MaxValue
             };
 
             var result = TabuSearch(init);
@@ -40,7 +40,7 @@ namespace PEA_TSP_1.Algorithms
             TabuAlgorithmResult bestSolution = initialSolution;
             TabuAlgorithmResult currentSolution = initialSolution;
             tabuList = new Queue<Move>();
-            stopCondition.MaxIterations = 5000;
+            stopCondition.MaxIterations = 100;
 
             int currentIteration = 0;
             while (!stopCondition.mustStop(++currentIteration))
@@ -72,24 +72,30 @@ namespace PEA_TSP_1.Algorithms
             int bestCost = Int32.MaxValue;
             move = new Move(0,0);
             TabuAlgorithmResult bestResult = new TabuAlgorithmResult();
-            var pathList = new List<int>(currentSolution.Path);
+
 
             for (int i = 0; i < currentSolution.Path.Count; i++)
             {
                 for (int j = 1; j < currentSolution.Path.Count; j++)
                 {
-                    var currMove = new Move(i, j);
-                    if (j != i && !tabuMoves.Contains(currMove))
+                    var pathList = new List<int>(currentSolution.Path);
+                    if (j != i)
                     {
+                        var currMove = new Move(i, j);
+
                         TabuAlgorithmResult temp = new TabuAlgorithmResult();
                         temp.Path = Swap(i, j, pathList);
                         int currCost = temp.CalculateWeight(_graph);
 
-                        if (currCost < bestCost)
+                        //TODO: ASPIRATION CRITERIUM
+                        if (!tabuMoves.Contains(currMove))
                         {
-                            bestCost = currCost;
-                            move = currMove;
-                            bestResult = temp;
+                            if (currCost < bestCost)
+                            {
+                                bestCost = currCost;
+                                move = new Move(currMove);
+                                bestResult = new TabuAlgorithmResult(temp);
+                            }
                         }
                     }
                 }
@@ -120,6 +126,17 @@ namespace PEA_TSP_1.Algorithms
 
     public class TabuAlgorithmResult : AlgorithmResult
     {
+        public TabuAlgorithmResult()
+        {
+            Path = new List<int>();
+        }
+
+        public TabuAlgorithmResult(TabuAlgorithmResult alg)
+        {
+            Path = new List<int>(alg.Path);
+            Weight = alg.Weight;
+        }
+
         public int CalculateWeight(Graph _graph)
         {
             int weight = 0;
@@ -127,7 +144,7 @@ namespace PEA_TSP_1.Algorithms
             {
                 weight += _graph.GetWeight(Path[i],Path[i+1]);
             }
-            weight += _graph.GetWeight(Path[_graph.NumberOfCities - 1], 0);
+            weight += _graph.GetWeight(Path[_graph.NumberOfCities - 1], Path[0]);
 
             Weight = weight;
             return weight;
@@ -139,10 +156,32 @@ namespace PEA_TSP_1.Algorithms
         public int Vertex1 { get; set; }
         public int Vertex2 { get; set; }
 
+        public Move(Move move)
+        {
+            Vertex1 = move.Vertex1;
+            Vertex2 = move.Vertex2;
+        }
+
         public Move(int v1, int v2)
         {
             Vertex1 = v1;
             Vertex2 = v2;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var objMove = (Move) obj;
+
+            if ((Vertex1 == objMove.Vertex1 && Vertex2 == objMove.Vertex2) ||
+                (Vertex2 == objMove.Vertex1 && Vertex1 == objMove.Vertex2))
+                return true;
+
+           return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
