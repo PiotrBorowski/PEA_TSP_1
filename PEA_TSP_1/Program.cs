@@ -12,9 +12,9 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-
             InstanceTests(15);
-            InstanceTests(17);
+            InstanceTests(42); //699
+            InstanceTests(26); //937
 
             Console.Read();
         }
