@@ -13,8 +13,10 @@ namespace PEA_TSP_1
         static void Main(string[] args)
         {
             InstanceTests(15);
-            InstanceTests(42); //699
+            InstanceTests(17);
             InstanceTests(26); //937
+            InstanceTests(42); //699
+            InstanceTests(48); //10628
 
             Console.Read();
         }
@@ -31,7 +33,7 @@ namespace PEA_TSP_1
             //algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
             //ComputeAndSave(algorithm);
 
-            algorithm = new TabuSearchAlgorithm(graph){Name = $"TabuSearch{cities}"};
+            algorithm = new TabuSearchAlgorithm(graph, 500, cities){Name = $"TabuSearch{cities}"};
             ComputeAndSave(algorithm);
         }
 

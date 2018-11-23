@@ -11,15 +11,17 @@ namespace PEA_TSP_1.Algorithms
         public AlgorithmResult Result { get; set; }
         public string Name { get; set; }
 
-        private Queue<Move> tabuList;
-        private StopCondition stopCondition;
-        private int maxTabuSize = 25;
+        private Queue<Move> _tabuList;
+        private StopCondition _stopCondition;
+        private int _maxTabuSize;
         private Graph _graph;
 
-        public TabuSearchAlgorithm(Graph graph)
+        public TabuSearchAlgorithm(Graph graph, int maxIterations, int maxTabuSize)
         {
             _graph = graph;
-            stopCondition = new StopCondition();
+            _stopCondition = new StopCondition();
+            _stopCondition.MaxIterations = maxIterations;
+            _maxTabuSize = maxTabuSize;
         }
 
         public void Invoke()
@@ -39,26 +41,25 @@ namespace PEA_TSP_1.Algorithms
         {
             TabuAlgorithmResult bestSolution = initialSolution;
             TabuAlgorithmResult currentSolution = initialSolution;
-            tabuList = new Queue<Move>();
-            stopCondition.MaxIterations = 100;
+            _tabuList = new Queue<Move>();
 
             int currentIteration = 0;
-            while (!stopCondition.mustStop(++currentIteration))
+            while (!_stopCondition.mustStop(++currentIteration))
             {
                 TabuAlgorithmResult bestNeighborFound =
-                    FindBestNeighbor(currentSolution, tabuList.ToList(), out var move);
+                    FindBestNeighbor(currentSolution, _tabuList.ToList(), out var move);
 
                 if (bestNeighborFound.Weight < bestSolution.Weight)
                 {
                     bestSolution = bestNeighborFound;
                 }
 
-                tabuList.Enqueue(move);
+                _tabuList.Enqueue(move);
                 currentSolution = bestNeighborFound;
 
-                if (tabuList.Count > maxTabuSize)
+                if (_tabuList.Count > _maxTabuSize)
                 {
-                    tabuList.Dequeue();
+                    _tabuList.Dequeue();
                 }
             }
 
