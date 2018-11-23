@@ -46,6 +46,7 @@ namespace PEA_TSP_1.Algorithms
             int currentIteration = 0;
             while (!_stopCondition.mustStop(++currentIteration))
             {
+                //algorytm najblizszego sasiada
                 TabuAlgorithmResult bestNeighborFound =
                     FindBestNeighbor(currentSolution, _tabuList.ToList(), out var move);
 
@@ -54,9 +55,11 @@ namespace PEA_TSP_1.Algorithms
                     bestSolution = bestNeighborFound;
                 }
 
+                //
                 _tabuList.Enqueue(move);
                 currentSolution = bestNeighborFound;
 
+                //max tabu size
                 if (_tabuList.Count > _maxTabuSize)
                 {
                     _tabuList.Dequeue();

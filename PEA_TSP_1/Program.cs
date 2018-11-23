@@ -27,13 +27,14 @@ namespace PEA_TSP_1
 
             Write(graph);
 
-            IAlgorithm algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
+            IAlgorithm algorithm;
+            //algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
             //ComputeAndSave(algorithm);
 
             //algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
             //ComputeAndSave(algorithm);
 
-            algorithm = new TabuSearchAlgorithm(graph, 500, cities){Name = $"TabuSearch{cities}"};
+            algorithm = new TabuSearchAlgorithm(graph, 500, 25){Name = $"TabuSearch{cities}"};
             ComputeAndSave(algorithm);
         }
 
