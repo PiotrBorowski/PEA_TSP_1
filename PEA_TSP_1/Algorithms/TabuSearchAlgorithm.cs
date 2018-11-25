@@ -15,6 +15,7 @@ namespace PEA_TSP_1.Algorithms
         private StopCondition _stopCondition;
         private int _maxTabuSize;
         private Graph _graph;
+        private TabuAlgorithmResult bestSolution;
 
         public TabuSearchAlgorithm(Graph graph, int maxIterations, int maxTabuSize)
         {
@@ -39,7 +40,7 @@ namespace PEA_TSP_1.Algorithms
 
         public TabuAlgorithmResult TabuSearch(TabuAlgorithmResult initialSolution)
         {
-            TabuAlgorithmResult bestSolution = initialSolution;
+            bestSolution = initialSolution;
             TabuAlgorithmResult currentSolution = initialSolution;
             _tabuList = new Queue<Move>();
 
@@ -94,7 +95,7 @@ namespace PEA_TSP_1.Algorithms
                         //TODO: ASPIRATION CRITERIUM
                         if (!tabuMoves.Contains(currMove))
                         {
-                            if (currCost < bestCost)
+                            if (currCost < bestCost || currCost < bestSolution.Weight)
                             {
                                 bestCost = currCost;
                                 move = new Move(currMove);

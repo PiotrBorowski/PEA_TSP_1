@@ -12,11 +12,12 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            InstanceTests(15);
-            InstanceTests(17);
-            InstanceTests(26); //937
-            InstanceTests(42); //699
-            InstanceTests(48); //10628
+            //InstanceTestsDeviation(15, 291);
+            //InstanceTestsDeviation(17, 39);
+            //InstanceTestsDeviation(26, 937); //937
+            //InstanceTestsDeviation(42, 699); //699
+            InstanceTestsDeviation(48, 10628); //10628
+            InstanceTestsDeviation(52, 7542);
 
             Console.Read();
         }
@@ -36,6 +37,19 @@ namespace PEA_TSP_1
 
             algorithm = new TabuSearchAlgorithm(graph, 500, 25){Name = $"TabuSearch{cities}"};
             ComputeAndSave(algorithm);
+        }
+
+
+        public static void InstanceTestsDeviation(int cities, int refWeight)
+        {
+            var graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
+
+            Write(graph);
+
+            IAlgorithm algorithm;
+
+            algorithm = new TabuSearchAlgorithm(graph, 1000, 5*cities) { Name = $"TabuSearch{cities}" };
+            ComputeAndSaveDeviation(algorithm, refWeight);
         }
 
         public static void Write(Graph graph)
@@ -81,15 +95,15 @@ namespace PEA_TSP_1
 
         public static void ComputeAndSave(IAlgorithm algorithm)
         {
-            //using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
-            //{
-                for (int i = 0; i < 1; i++)
+            using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
+            {
+                for (int i = 0; i < 10; i++)
                 {
                     Console.WriteLine(algorithm.Name);
                     long time = MeasureTime(algorithm);
                     Console.WriteLine("Time");
                     Console.WriteLine(time);
-                  //  writer.WriteLine(time);
+                   writer.WriteLine(time);
 
                     Console.WriteLine("Path:");
                     Write(algorithm.Result.Path);
@@ -97,8 +111,45 @@ namespace PEA_TSP_1
                     Console.WriteLine(algorithm.Result.Weight);
 
                     Console.WriteLine();
-               // }
-                //writer.Close();
+               }
+                writer.Close();
+            }
+        }
+
+        public static void ComputeAndSaveDeviation(IAlgorithm algorithm, int refWeight)
+        {
+            using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
+            {
+                var results = new List<int>();
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine(algorithm.Name);
+                    long time = MeasureTime(algorithm);
+                    Console.WriteLine("Time");
+                    Console.WriteLine(time);
+                    writer.WriteLine(time);
+
+                    Console.WriteLine("Path:");
+                    Write(algorithm.Result.Path);
+                    Console.WriteLine("Weight:");
+                    Console.WriteLine(algorithm.Result.Weight);
+                    results.Add(algorithm.Result.Weight);
+                    Console.WriteLine();
+                }
+                writer.WriteLine("Deviation");
+                Console.WriteLine("Deviation");
+                int sum = 0;
+                foreach (var result in results)
+                {
+                    sum += (result - refWeight) * 100 / refWeight;
+                }
+
+                sum /= results.Count;
+                writer.WriteLine(sum);
+                Console.WriteLine(sum);
+
+                writer.WriteLine();
+                writer.Close();
             }
         }
     }
