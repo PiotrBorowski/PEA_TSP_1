@@ -37,7 +37,7 @@ namespace PEA_TSP_1
                     for (int i = 0; i < _numberOfCities; i++)
                     {
                         text = sr.ReadLine();
-                        var numbersAsText = text.Split(new string[]{"", " "}, StringSplitOptions.RemoveEmptyEntries);
+                        var numbersAsText = text.Split(new string[]{"", " ", "\t"}, StringSplitOptions.RemoveEmptyEntries);
 
                         for (int j = 0; j < _numberOfCities; j++)
                         {

@@ -16,28 +16,31 @@ namespace PEA_TSP_1
             //InstanceTestsDeviation(17, 39);
             //InstanceTestsDeviation(26, 937); //937
             //InstanceTestsDeviation(42, 699); //699
+            //powyzej wszystkie dla 500 / 3000, 50
+
+            ////3000, 50
             InstanceTestsDeviation(48, 10628); //10628
-            InstanceTestsDeviation(52, 7542);
+            InstanceTestsDeviation(52, 7542); // dla 
 
             Console.Read();
         }
 
-        public static void InstanceTests(int cities)
-        {
-            var graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
+        //public static void InstanceTests(int cities)
+        //{
+        //    var graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
 
-            Write(graph);
+        //    Write(graph);
 
-            IAlgorithm algorithm;
-            //algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
-            //ComputeAndSave(algorithm);
+        //    IAlgorithm algorithm;
+        //    //algorithm = new BruteForceAlgorithm(graph) { Name = $"BruteForce{cities}" };
+        //    //ComputeAndSave(algorithm);
 
-            //algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
-            //ComputeAndSave(algorithm);
+        //    //algorithm = new HeldKarpAlgorithm(graph, 0) { Name = $"HeldKarp{cities}" };
+        //    //ComputeAndSave(algorithm);
 
-            algorithm = new TabuSearchAlgorithm(graph, 500, 25){Name = $"TabuSearch{cities}"};
-            ComputeAndSave(algorithm);
-        }
+        //    algorithm = new TabuSearchAlgorithm(graph, 1000, 50){Name = $"TabuSearch{cities}"};
+        //    ComputeAndSave(algorithm);
+        //}
 
 
         public static void InstanceTestsDeviation(int cities, int refWeight)
@@ -48,7 +51,7 @@ namespace PEA_TSP_1
 
             IAlgorithm algorithm;
 
-            algorithm = new TabuSearchAlgorithm(graph, 1000, 5*cities) { Name = $"TabuSearch{cities}" };
+            algorithm = new TabuSearchAlgorithm(graph, 3000, 50) { Name = $"TabuSearch{cities}" };
             ComputeAndSaveDeviation(algorithm, refWeight);
         }
 
@@ -138,10 +141,10 @@ namespace PEA_TSP_1
                 }
                 writer.WriteLine("Deviation");
                 Console.WriteLine("Deviation");
-                int sum = 0;
+                float sum = 0;
                 foreach (var result in results)
                 {
-                    sum += (result - refWeight) * 100 / refWeight;
+                    sum += (result - refWeight) * 100f / refWeight;
                 }
 
                 sum /= results.Count;
