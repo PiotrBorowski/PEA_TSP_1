@@ -63,6 +63,7 @@ namespace PEA_TSP_1.Algorithms
                     if (critCounter == _maxCritCounter && _maxCritCounter != 0)
                     {
                         currentSolution = TabuAlgorithmResult.GenerateResult(_graph.NumberOfCities);
+                        critCounter = 0;
                     }
                 }
                 //
