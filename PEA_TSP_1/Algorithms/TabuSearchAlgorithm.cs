@@ -27,12 +27,9 @@ namespace PEA_TSP_1.Algorithms
 
         public void Invoke()
         {
-            var init = new TabuAlgorithmResult()
-            {
-                Path = Enumerable.Range(0, _graph.NumberOfCities).ToList(),
-                Weight = Int32.MaxValue
-            };
+            var init = TabuAlgorithmResult.GenerateResult(_graph.NumberOfCities);
 
+            init.CalculateWeight(_graph);
             var result = TabuSearch(init);
 
             Result = new AlgorithmResult{Path = result.Path, Weight = result.Weight};
@@ -92,7 +89,6 @@ namespace PEA_TSP_1.Algorithms
                         temp.Path = Swap(i, j, pathList);
                         int currCost = temp.CalculateWeight(_graph);
 
-                        //TODO: ASPIRATION CRITERIUM
                         if (!tabuMoves.Contains(currMove))
                         {
                             if (currCost < bestCost || currCost < bestSolution.Weight)
@@ -131,6 +127,8 @@ namespace PEA_TSP_1.Algorithms
 
     public class TabuAlgorithmResult : AlgorithmResult
     {
+        private static Random rng = new Random();
+
         public TabuAlgorithmResult()
         {
             Path = new List<int>();
@@ -153,6 +151,30 @@ namespace PEA_TSP_1.Algorithms
 
             Weight = weight;
             return weight;
+        }
+
+        public void Shuffle()
+        {
+            int n = Path.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                var value = Path[k];
+                Path[k] = Path[n];
+                Path[n] = value;
+            }
+        }
+
+        public static TabuAlgorithmResult GenerateResult(int size)
+        {
+            var init = new TabuAlgorithmResult()
+            {
+                Path = Enumerable.Range(0, size).ToList()
+            };
+            init.Shuffle();
+
+            return init;
         }
     }
 

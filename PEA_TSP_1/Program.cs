@@ -12,13 +12,13 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            //InstanceTestsDeviation(15, 291);
-            //InstanceTestsDeviation(17, 39);
-            //InstanceTestsDeviation(26, 937); //937
-            //InstanceTestsDeviation(42, 699); //699
+            InstanceTestsDeviation(15, 291);
+            InstanceTestsDeviation(17, 39);
+            InstanceTestsDeviation(26, 937); //937
+            InstanceTestsDeviation(42, 699); //699
             //powyzej wszystkie dla 500 / 3000, 50
 
-            ////3000, 50
+            //3000, 50
             InstanceTestsDeviation(48, 10628); //10628
             InstanceTestsDeviation(52, 7542); // dla 
 
@@ -51,7 +51,7 @@ namespace PEA_TSP_1
 
             IAlgorithm algorithm;
 
-            algorithm = new TabuSearchAlgorithm(graph, 3000, 50) { Name = $"TabuSearch{cities}" };
+            algorithm = new TabuSearchAlgorithm(graph, 500, 50) { Name = $"TabuSearch{cities}" };
             ComputeAndSaveDeviation(algorithm, refWeight);
         }
 
