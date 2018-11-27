@@ -14,15 +14,17 @@ namespace PEA_TSP_1.Algorithms
         private Queue<Move> _tabuList;
         private StopCondition _stopCondition;
         private int _maxTabuSize;
+        private int _maxCritCounter;
         private Graph _graph;
         private TabuAlgorithmResult bestSolution;
 
-        public TabuSearchAlgorithm(Graph graph, int maxIterations, int maxTabuSize)
+        public TabuSearchAlgorithm(Graph graph, int maxIterations, int maxTabuSize, int maxCritCounter)
         {
             _graph = graph;
             _stopCondition = new StopCondition();
             _stopCondition.MaxIterations = maxIterations;
             _maxTabuSize = maxTabuSize;
+            _maxCritCounter = maxCritCounter;
         }
 
         public void Invoke()
@@ -40,6 +42,7 @@ namespace PEA_TSP_1.Algorithms
             bestSolution = initialSolution;
             TabuAlgorithmResult currentSolution = initialSolution;
             _tabuList = new Queue<Move>();
+            int critCounter = 0;
 
             int currentIteration = 0;
             while (!_stopCondition.mustStop(++currentIteration))
@@ -51,8 +54,17 @@ namespace PEA_TSP_1.Algorithms
                 if (bestNeighborFound.Weight < bestSolution.Weight)
                 {
                     bestSolution = bestNeighborFound;
+                    critCounter = 0;
                 }
-
+                else
+                {
+                    //dywersyfikacja
+                    critCounter++;
+                    if (critCounter == _maxCritCounter && _maxCritCounter != 0)
+                    {
+                        currentSolution = TabuAlgorithmResult.GenerateResult(_graph.NumberOfCities);
+                    }
+                }
                 //
                 _tabuList.Enqueue(move);
                 currentSolution = bestNeighborFound;
