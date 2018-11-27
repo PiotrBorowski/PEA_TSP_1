@@ -47,14 +47,14 @@ namespace PEA_TSP_1
         {
             var graph = new Graph($"C:\\Users\\Piotr Borowski\\source\\repos\\PEA_TSP_1\\PEA_TSP_1\\data{cities}.txt");
 
-            Write(graph);
+            //Write(graph);
 
             IAlgorithm algorithm;
 
             algorithm = new TabuSearchAlgorithm(graph, 1000, 50, 75) { Name = $"TabuSearch{cities}D" };
-            ComputeAndSaveDeviation(algorithm, refWeight);
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
             algorithm = new TabuSearchAlgorithm(graph, 1000, 50, 0) { Name = $"TabuSearch{cities}" };
-            ComputeAndSaveDeviation(algorithm, refWeight);
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
         }
 
         public static void Write(Graph graph)
@@ -121,15 +121,17 @@ namespace PEA_TSP_1
             }
         }
 
-        public static void ComputeAndSaveDeviation(IAlgorithm algorithm, int refWeight)
+        public static void ComputeAndSaveDeviation(IAlgorithm algorithm, int refWeight, int iterations)
         {
             using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
             {
+                long timeSum = 0;
                 var results = new List<int>();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < iterations; i++)
                 {
                     Console.WriteLine(algorithm.Name);
                     long time = MeasureTime(algorithm);
+                    timeSum += time;
                     Console.WriteLine("Time");
                     Console.WriteLine(time);
                     writer.WriteLine(time);
@@ -139,7 +141,6 @@ namespace PEA_TSP_1
                     Console.WriteLine("Weight:");
                     Console.WriteLine(algorithm.Result.Weight);
                     results.Add(algorithm.Result.Weight);
-                    Console.WriteLine();
                 }
                 writer.WriteLine("Deviation");
                 Console.WriteLine("Deviation");
@@ -148,12 +149,16 @@ namespace PEA_TSP_1
                 {
                     sum += (result - refWeight) * 100f / refWeight;
                 }
-
                 sum /= results.Count;
-                writer.WriteLine(sum);
-                Console.WriteLine(sum);
+                writer.WriteLine(sum+"%");
+                Console.WriteLine(sum+"%");
 
+                writer.WriteLine("Average Time:");
+                Console.WriteLine("Average Time:");
+                writer.WriteLine(timeSum/ iterations);
+                Console.WriteLine(timeSum/iterations);
                 writer.WriteLine();
+                Console.WriteLine();
                 writer.Close();
             }
         }
