@@ -51,9 +51,14 @@ namespace PEA_TSP_1
 
             IAlgorithm algorithm;
 
-            algorithm = new TabuSearchAlgorithm(graph, 1000, 50, 75) { Name = $"TabuSearch{cities}D" };
+            algorithm = new TabuSearchAlgorithm(graph, 1000, 50, 80) { Name = $"TabuSearch{cities}D" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
             algorithm = new TabuSearchAlgorithm(graph, 1000, 50, 0) { Name = $"TabuSearch{cities}" };
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            algorithm = new TabuSearchAlgorithm(graph, 2000, 50, 150) { Name = $"Tabu2000Search{cities}D" };
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
+            algorithm = new TabuSearchAlgorithm(graph, 2000, 50, 0) { Name = $"Tabu2000Search{cities}" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
         }
 
