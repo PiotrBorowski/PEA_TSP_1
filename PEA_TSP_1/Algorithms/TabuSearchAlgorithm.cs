@@ -66,7 +66,8 @@ namespace PEA_TSP_1.Algorithms
                         critCounter = 0;
                     }
                 }
-                //
+
+                //dodawanie ostatniego ruchu
                 _tabuList.Enqueue(move);
                 currentSolution = bestNeighborFound;
 

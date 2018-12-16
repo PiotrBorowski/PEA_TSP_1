@@ -12,16 +12,14 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            InstanceTestsDeviation(15, 291);
             InstanceTestsDeviation(17, 39);
             InstanceTestsDeviation(26, 937); //937
             InstanceTestsDeviation(42, 699); //699
-            //powyzej wszystkie dla 500 / 3000, 50
+            InstanceTestsDeviation(52, 7542);
+            //InstanceTestsDeviation(120, 6942);
 
-            //3000, 50
-            InstanceTestsDeviation(48, 10628); //10628
-            InstanceTestsDeviation(52, 7542); // dla 
 
+            //InstanceTestsDeviation(48, 10628); //10628
             Console.Read();
         }
 
@@ -51,14 +49,21 @@ namespace PEA_TSP_1
 
             IAlgorithm algorithm;
 
-            algorithm = new TabuSearchAlgorithm(graph, 1000, 50, 80) { Name = $"TabuSearch{cities}D" };
+
+            algorithm = new TabuSearchAlgorithm(graph, 1000, graph.NumberOfCities + 5, 100) { Name = $"TabuSearch{cities}D" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
-            algorithm = new TabuSearchAlgorithm(graph, 1000, 50, 0) { Name = $"TabuSearch{cities}" };
+            algorithm = new TabuSearchAlgorithm(graph, 1000, graph.NumberOfCities + 5, 0) { Name = $"TabuSearch{cities}" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            algorithm = new TabuSearchAlgorithm(graph, 2000, 50, 150) { Name = $"Tabu2000Search{cities}D" };
+
+            algorithm = new TabuSearchAlgorithm(graph, 2000, graph.NumberOfCities + 5, 100) { Name = $"Tabu2000Search{cities}D" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
-            algorithm = new TabuSearchAlgorithm(graph, 2000, 50, 0) { Name = $"Tabu2000Search{cities}" };
+            algorithm = new TabuSearchAlgorithm(graph, 2000, graph.NumberOfCities + 5, 0) { Name = $"Tabu2000Search{cities}" };
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            algorithm = new TabuSearchAlgorithm(graph, 4000, graph.NumberOfCities + 5, 100) { Name = $"Tabu4000Search{cities}D" };
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
+            algorithm = new TabuSearchAlgorithm(graph, 4000, graph.NumberOfCities + 5, 0) { Name = $"Tabu4000Search{cities}" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
         }
 
@@ -128,8 +133,8 @@ namespace PEA_TSP_1
 
         public static void ComputeAndSaveDeviation(IAlgorithm algorithm, int refWeight, int iterations)
         {
-            using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
-            {
+            //using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
+            //{
                 long timeSum = 0;
                 var results = new List<int>();
                 for (int i = 0; i < iterations; i++)
@@ -139,7 +144,7 @@ namespace PEA_TSP_1
                     timeSum += time;
                     Console.WriteLine("Time");
                     Console.WriteLine(time);
-                    writer.WriteLine(time);
+                    //writer.WriteLine(time);
 
                     Console.WriteLine("Path:");
                     Write(algorithm.Result.Path);
@@ -147,7 +152,7 @@ namespace PEA_TSP_1
                     Console.WriteLine(algorithm.Result.Weight);
                     results.Add(algorithm.Result.Weight);
                 }
-                writer.WriteLine("Deviation");
+                //writer.WriteLine("Deviation");
                 Console.WriteLine("Deviation");
                 float sum = 0;
                 foreach (var result in results)
@@ -155,17 +160,17 @@ namespace PEA_TSP_1
                     sum += (result - refWeight) * 100f / refWeight;
                 }
                 sum /= results.Count;
-                writer.WriteLine(sum+"%");
-                Console.WriteLine(sum+"%");
+                //writer.WriteLine(sum + "%");
+                Console.WriteLine(sum + "%");
 
-                writer.WriteLine("Average Time:");
+                //writer.WriteLine("Average Time:");
                 Console.WriteLine("Average Time:");
-                writer.WriteLine(timeSum/ iterations);
-                Console.WriteLine(timeSum/iterations);
-                writer.WriteLine();
+                //writer.WriteLine(timeSum / iterations);
+                Console.WriteLine(timeSum / iterations);
+                //writer.WriteLine();
                 Console.WriteLine();
-                writer.Close();
-            }
+                //writer.Close();
+            //}
         }
     }
 }
