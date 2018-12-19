@@ -49,21 +49,8 @@ namespace PEA_TSP_1
             IAlgorithm algorithm;
 
 
-            algorithm = new TabuSearchAlgorithm(graph, 1000, graph.NumberOfCities + 5, 100) { Name = $"TabuSearch{cities}D" };
-            ComputeAndSaveDeviation(algorithm, refWeight, 10);
-            algorithm = new TabuSearchAlgorithm(graph, 1000, graph.NumberOfCities + 5, 0) { Name = $"TabuSearch{cities}" };
-            ComputeAndSaveDeviation(algorithm, refWeight, 10);
-
-
-            algorithm = new TabuSearchAlgorithm(graph, 2000, graph.NumberOfCities + 5, 100) { Name = $"Tabu2000Search{cities}D" };
-            ComputeAndSaveDeviation(algorithm, refWeight, 10);
-            algorithm = new TabuSearchAlgorithm(graph, 2000, graph.NumberOfCities + 5, 0) { Name = $"Tabu2000Search{cities}" };
-            ComputeAndSaveDeviation(algorithm, refWeight, 10);
-
-            algorithm = new TabuSearchAlgorithm(graph, 4000, graph.NumberOfCities + 5, 100) { Name = $"Tabu4000Search{cities}D" };
-            ComputeAndSaveDeviation(algorithm, refWeight, 10);
-            algorithm = new TabuSearchAlgorithm(graph, 4000, graph.NumberOfCities + 5, 0) { Name = $"Tabu4000Search{cities}" };
-            ComputeAndSaveDeviation(algorithm, refWeight, 10);
+            algorithm = new GenethicAlgorithm(graph,1,0.6f,1);
+            ComputeAndSaveDeviation(algorithm,1000,1);
         }
 
         public static void Write(Graph graph)

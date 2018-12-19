@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 
 namespace PEA_TSP_1.Algorithms
 {
@@ -25,103 +26,73 @@ namespace PEA_TSP_1.Algorithms
 
         public void Invoke()
         {
-            List<Individual> population = CreatePopulation(50);
+            Population population = new Population(_graph.NumberOfCities, 10, _mutationRate, _crossOverRate);
 
-            var ind = new Individual{Path = new List<int>{1,2,3,4,5,6,7,8,9}};
-            var ind2 = new Individual { Path = new List<int> { 9,8,7,6,5,4,3,2,1 } };
-            ind.CrossOver(ref ind2);
-
-            var result = SearchBestResult(population);
-            
+            var result = SearchBestResult(population);           
         }
 
-        private Individual SearchBestResult(List<Individual> population)
+        private Individual SearchBestResult(Population population)
         {
             Individual bestIndividual = null;
 
-            foreach (var individual in population)
-            {
-                individual.CalculateWeight(_graph);
-            }
+            population.CalculateWeight(_graph);
+
+            population.CrossOver();
 
             return bestIndividual;
         }
-
-        private List<Individual> CreatePopulation(int size)
-        {
-            List<Individual> population = new List<Individual>();
-            for (int i = 0; i < size; i++)
-            {
-                population.Add(Individual.GenerateIndividual(_graph.NumberOfCities));
-            }
-
-            return population;
-        }
     }
 
-    public class Individual : AlgorithmResultShuffled
+   
+    public class Population
     {
-        public void Mutate(float probability)
-        {
-            Random random = new Random();
-            if (random.NextDouble() < probability)
-            {
-                int index = random.Next()%Path.Count;
-                int index2;
-                do
-                {
-                    index2 = random.Next() % Path.Count;
-                } while (index2 == index);
+        private readonly List<Individual> _population;
+        private readonly float _mutationRate;
+        private readonly float _crossOverRate;
 
-                int temp = Path[index2];
-                Path[index2] = Path[index];
-                Path[index] = temp;
+        public Population(int sizeOfIndividual, int count, float mutationRate, float crossOverRate)
+        {
+            _mutationRate = mutationRate;
+            _crossOverRate = crossOverRate;
+            _population = new List<Individual>();
+            for (int i = 0; i < count; i++)
+            {
+                _population.Add(Individual.GenerateIndividual(sizeOfIndividual));
             }
         }
 
-        public void CrossOver(ref Individual individual)
+        public void CalculateWeight(Graph graph)
         {
-            int index1 = Path.Count / 3;
-            int index2 = Path.Count * 2 / 3;
-
-            Dictionary<int,int> map = new Dictionary<int, int>();
-
-            for (int i = index1; i < index2 - index1 + 1; i++)
+            foreach (var individual in _population)
             {
-                int city1 = Path[i];
-                int city2 = individual.Path[i];
-
-                if(city2 != city1)
-                    map.Add(city1, city2);
-
-                Path[i] = city2;
-                individual.Path[i] = city1;
-            }
-
-            for (int i = 0; i < Path.Count; i++)
-            {
-                if (i < index1 && i > index2)
-                {
-                    if (map.ContainsKey(Path[i]))
-                        Path[i] = map[Path[i]];
-
-                    if (map.ContainsValue(individual.Path[i]))
-                    {
-                        individual.Path[i] = map.FirstOrDefault(x => x.Value == Path[i]).Key;
-                    }
-                }         
+                individual.CalculateWeight(graph);
             }
         }
 
-        public static Individual GenerateIndividual(int size)
+        public void CrossOver()
         {
-            var init = new Individual
+            //TODO: CROSSOVER STRATEGY
+            int iterations = _population.Count;
+            for (int i = 0; i < iterations - 1; i++)
             {
-                Path = Enumerable.Range(0, size).ToList()
-            };
+                var individual = _population[i];
+                var individual2 = _population[i + 1];
 
-            init.Shuffle();
-            return init;
+                var childs = individual.CrossOver(individual2, _crossOverRate);
+                if (childs.Item1 != null || childs.Item2 != null)
+                {
+                    _population.Add(childs.Item1);
+                    _population.Add(childs.Item2);
+                }
+            }
+        }
+
+        public void Mutate()
+        {
+            foreach (var individual in _population)
+            {
+                individual.Mutate(_mutationRate);
+            }
         }
     }
 }
