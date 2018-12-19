@@ -27,13 +27,17 @@ namespace PEA_TSP_1.Algorithms
         {
             List<Individual> population = CreatePopulation(50);
 
+            var ind = new Individual{Path = new List<int>{1,2,3,4,5,6,7,8,9}};
+            var ind2 = new Individual { Path = new List<int> { 9,8,7,6,5,4,3,2,1 } };
+            ind.CrossOver(ref ind2);
+
             var result = SearchBestResult(population);
             
         }
 
         private Individual SearchBestResult(List<Individual> population)
         {
-            Individual bestIndividual;
+            Individual bestIndividual = null;
 
             foreach (var individual in population)
             {
@@ -75,9 +79,38 @@ namespace PEA_TSP_1.Algorithms
             }
         }
 
-        public void CrossOver(Individual individual)
+        public void CrossOver(ref Individual individual)
         {
-            throw new NotImplementedException();
+            int index1 = Path.Count / 3;
+            int index2 = Path.Count * 2 / 3;
+
+            Dictionary<int,int> map = new Dictionary<int, int>();
+
+            for (int i = index1; i < index2 - index1 + 1; i++)
+            {
+                int city1 = Path[i];
+                int city2 = individual.Path[i];
+
+                if(city2 != city1)
+                    map.Add(city1, city2);
+
+                Path[i] = city2;
+                individual.Path[i] = city1;
+            }
+
+            for (int i = 0; i < Path.Count; i++)
+            {
+                if (i < index1 && i > index2)
+                {
+                    if (map.ContainsKey(Path[i]))
+                        Path[i] = map[Path[i]];
+
+                    if (map.ContainsValue(individual.Path[i]))
+                    {
+                        individual.Path[i] = map.FirstOrDefault(x => x.Value == Path[i]).Key;
+                    }
+                }         
+            }
         }
 
         public static Individual GenerateIndividual(int size)

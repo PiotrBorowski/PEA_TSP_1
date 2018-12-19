@@ -18,7 +18,6 @@ namespace PEA_TSP_1
             InstanceTestsDeviation(52, 7542);
             //InstanceTestsDeviation(120, 6942);
 
-
             //InstanceTestsDeviation(48, 10628); //10628
             Console.Read();
         }
