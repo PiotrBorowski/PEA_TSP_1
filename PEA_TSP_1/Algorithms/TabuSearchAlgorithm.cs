@@ -16,7 +16,7 @@ namespace PEA_TSP_1.Algorithms
         private int _maxTabuSize;
         private int _maxCritCounter;
         private Graph _graph;
-        private TabuAlgorithmResult bestSolution;
+        private AlgorithmResultShuffled bestSolution;
 
         public TabuSearchAlgorithm(Graph graph, int maxIterations, int maxTabuSize, int maxCritCounter)
         {
@@ -29,7 +29,7 @@ namespace PEA_TSP_1.Algorithms
 
         public void Invoke()
         {
-            var init = TabuAlgorithmResult.GenerateResult(_graph.NumberOfCities);
+            var init = AlgorithmResultShuffled.GenerateResult(_graph.NumberOfCities);
 
             init.CalculateWeight(_graph);
             var result = TabuSearch(init);
@@ -37,10 +37,10 @@ namespace PEA_TSP_1.Algorithms
             Result = new AlgorithmResult{Path = result.Path, Weight = result.Weight};
         }
 
-        public TabuAlgorithmResult TabuSearch(TabuAlgorithmResult initialSolution)
+        private AlgorithmResultShuffled TabuSearch(AlgorithmResultShuffled initialSolution)
         {
             bestSolution = initialSolution;
-            TabuAlgorithmResult currentSolution = initialSolution;
+            AlgorithmResultShuffled currentSolution = initialSolution;
             _tabuList = new Queue<Move>();
             int critCounter = 0;
 
@@ -48,7 +48,7 @@ namespace PEA_TSP_1.Algorithms
             while (!_stopCondition.mustStop(++currentIteration))
             {
                 //algorytm najblizszego sasiada
-                TabuAlgorithmResult bestNeighborFound =
+                AlgorithmResultShuffled bestNeighborFound =
                     FindBestNeighbor(currentSolution, _tabuList.ToList(), out var move);
 
                 if (bestNeighborFound.Weight < bestSolution.Weight)
@@ -62,7 +62,7 @@ namespace PEA_TSP_1.Algorithms
                     critCounter++;
                     if (critCounter == _maxCritCounter && _maxCritCounter != 0)
                     {
-                        currentSolution = TabuAlgorithmResult.GenerateResult(_graph.NumberOfCities);
+                        currentSolution = AlgorithmResultShuffled.GenerateResult(_graph.NumberOfCities);
                         critCounter = 0;
                     }
                 }
@@ -82,12 +82,12 @@ namespace PEA_TSP_1.Algorithms
         }
 
 
-        public TabuAlgorithmResult FindBestNeighbor(TabuAlgorithmResult currentSolution, List<Move> tabuMoves,
+        private AlgorithmResultShuffled FindBestNeighbor(AlgorithmResultShuffled currentSolution, List<Move> tabuMoves,
             out Move move)
         {
             int bestCost = Int32.MaxValue;
             move = new Move(0,0);
-            TabuAlgorithmResult bestResult = new TabuAlgorithmResult();
+            AlgorithmResultShuffled bestResultShuffled = new AlgorithmResultShuffled();
 
 
             for (int i = 0; i < currentSolution.Path.Count; i++)
@@ -99,7 +99,7 @@ namespace PEA_TSP_1.Algorithms
                     {
                         var currMove = new Move(i, j);
 
-                        TabuAlgorithmResult temp = new TabuAlgorithmResult();
+                        AlgorithmResultShuffled temp = new AlgorithmResultShuffled();
                         temp.Path = Swap(i, j, pathList);
                         int currCost = temp.CalculateWeight(_graph);
 
@@ -109,14 +109,14 @@ namespace PEA_TSP_1.Algorithms
                             {
                                 bestCost = currCost;
                                 move = new Move(currMove);
-                                bestResult = new TabuAlgorithmResult(temp);
+                                bestResultShuffled = new AlgorithmResultShuffled(temp);
                             }
                         }
                     }
                 }
             }
 
-            return bestResult;
+            return bestResultShuffled;
         }
 
         public List<int> Swap(int x, int y, List<int> path)
@@ -139,58 +139,6 @@ namespace PEA_TSP_1.Algorithms
         }
     }
 
-    public class TabuAlgorithmResult : AlgorithmResult
-    {
-        private static Random rng = new Random();
-
-        public TabuAlgorithmResult()
-        {
-            Path = new List<int>();
-        }
-
-        public TabuAlgorithmResult(TabuAlgorithmResult alg)
-        {
-            Path = new List<int>(alg.Path);
-            Weight = alg.Weight;
-        }
-
-        public int CalculateWeight(Graph _graph)
-        {
-            int weight = 0;
-            for (int i = 0; i < _graph.NumberOfCities-1; i++)
-            {
-                weight += _graph.GetWeight(Path[i],Path[i+1]);
-            }
-            weight += _graph.GetWeight(Path[_graph.NumberOfCities - 1], Path[0]);
-
-            Weight = weight;
-            return weight;
-        }
-
-        public void Shuffle()
-        {
-            int n = Path.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                var value = Path[k];
-                Path[k] = Path[n];
-                Path[n] = value;
-            }
-        }
-
-        public static TabuAlgorithmResult GenerateResult(int size)
-        {
-            var init = new TabuAlgorithmResult()
-            {
-                Path = Enumerable.Range(0, size).ToList()
-            };
-            init.Shuffle();
-
-            return init;
-        }
-    }
 
     public class Move
     {
