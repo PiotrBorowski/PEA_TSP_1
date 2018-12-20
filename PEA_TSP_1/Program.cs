@@ -16,7 +16,7 @@ namespace PEA_TSP_1
             InstanceTestsDeviation(26, 937); //937
             InstanceTestsDeviation(42, 699); //699
             InstanceTestsDeviation(52, 7542);
-            //InstanceTestsDeviation(120, 6942);
+            InstanceTestsDeviation(120, 6942);
 
             //InstanceTestsDeviation(48, 10628); //10628
             Console.Read();
@@ -49,8 +49,8 @@ namespace PEA_TSP_1
             IAlgorithm algorithm;
 
 
-            algorithm = new GenethicAlgorithm(graph,1,0.6f,1);
-            ComputeAndSaveDeviation(algorithm,1000,1);
+            algorithm = new GenethicAlgorithm(graph,0.8f,0.1f,2000){Name = $"GeneticAlgorithm{cities}"};
+            ComputeAndSaveDeviation(algorithm,refWeight,10);
         }
 
         public static void Write(Graph graph)
@@ -136,6 +136,7 @@ namespace PEA_TSP_1
                     Write(algorithm.Result.Path);
                     Console.WriteLine("Weight:");
                     Console.WriteLine(algorithm.Result.Weight);
+                    Console.WriteLine();
                     results.Add(algorithm.Result.Weight);
                 }
                 //writer.WriteLine("Deviation");
