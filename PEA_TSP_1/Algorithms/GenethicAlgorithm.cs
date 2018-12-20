@@ -52,6 +52,7 @@ namespace PEA_TSP_1.Algorithms
                 else
                 {
                     if (stopCounter == 100)
+                        //_mutationRate = 0.5f;
                         return bestIndividual;
                     stopCounter++;
                 }
@@ -126,7 +127,7 @@ namespace PEA_TSP_1.Algorithms
             _population.OrderByDescending(x => x.Weight);
             _population = new List<Individual>(_population.Take(_count));
 
-            return _population[0];
+            return new Individual(_population[0]);
         }
     }
 }

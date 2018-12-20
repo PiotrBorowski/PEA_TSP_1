@@ -49,7 +49,7 @@ namespace PEA_TSP_1
             IAlgorithm algorithm;
 
 
-            algorithm = new GenethicAlgorithm(graph,0.8f,0.1f,2000){Name = $"GeneticAlgorithm{cities}"};
+            algorithm = new GenethicAlgorithm(graph,0.8f,0.1f,5000){Name = $"GeneticAlgorithm{cities}"};
             ComputeAndSaveDeviation(algorithm,refWeight,10);
         }
 

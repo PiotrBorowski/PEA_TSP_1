@@ -46,6 +46,7 @@ namespace PEA_TSP_1.Algorithms
             Dictionary<int, int> map = new Dictionary<int, int>();
 
             Individual ind1 = new Individual(this);
+            //TODO: PRZETESTOWAC CZEMU NIE DZIALA DOBRZE BEZ BEZ KONSTRUKTORA
             Individual ind2 = new Individual(individual);
 
             //zamiana srodkowych czesci
