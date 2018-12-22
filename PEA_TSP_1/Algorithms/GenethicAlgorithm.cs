@@ -37,8 +37,9 @@ namespace PEA_TSP_1.Algorithms
             Individual bestIndividual = Individual.GenerateIndividual(_graph.NumberOfCities);
             for (int i = 0; i < _stopCondition; i++)
             {
-                population.CrossOver();
                 population.Mutate();
+
+                population.CrossOver();
                 var currentBest = population.NextGeneration(_graph);
 
                 if (currentBest.CalculateWeight(_graph) < bestIndividual.CalculateWeight(_graph))
@@ -50,11 +51,11 @@ namespace PEA_TSP_1.Algorithms
                 {
                     switch (stopCounter)
                     {
-                        case 100:
+                        case 70:
                             _mutationRate = 0.8f;
                             stopCounter = 0;
                             break;
-                        case 120:
+                        case 100:
                             return bestIndividual;
                     }
                     stopCounter++;
@@ -114,7 +115,6 @@ namespace PEA_TSP_1.Algorithms
                         _population.Add(childs.Item2);
                     }
                 }
-
             }
         }
 
@@ -129,8 +129,8 @@ namespace PEA_TSP_1.Algorithms
 
         public Individual NextGeneration(Graph graph)
         {
-            _population.OrderByDescending(x => x.CalculateWeight(graph));
-            _population = new List<Individual>(_population.Take(_count));
+            var sorted =_population.OrderBy(x => x.CalculateWeight(graph));
+            _population = new List<Individual>(sorted.Take(_count));
 
             return new Individual(_population[0]);
         }
