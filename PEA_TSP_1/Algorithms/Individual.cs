@@ -66,19 +66,48 @@ namespace PEA_TSP_1.Algorithms
             {
                 if (i < index1 || i > index2)
                 {
-                    if (map.ContainsKey(Path[i]) && ind1.Path.Count(x => x == Path[i]) > 1)
-                        ind1.Path[i] = map[ind1.Path[i]];
+                    var key = ind1.Path[i];
+                    ind1.Path[i] = GetPMXValue(map, key);
 
-                    var individualValue = ind2.Path[i];
-                    if (map.ContainsValue(individualValue) && ind2.Path.Count(x => x == individualValue) > 1)
-                    {
-                        ind2.Path[i] = map.FirstOrDefault(x => x.Value == individualValue).Key;
-                    }
+                    var value = ind2.Path[i];
+                    ind2.Path[i] = GetPMXKey(map, value);               
                 }
             }
 
+            //for (int i = 0; i < ind1.Path.Count; i++)
+            //{
+            //    if (ind1.Path.Count(x => x == i) > 1)
+            //        throw new Exception();
+            //    if (ind2.Path.Count(x => x == i) > 1)
+            //        throw new Exception();
+            //}
+
             return new Tuple<Individual, Individual>(ind1, ind2);
         }
+
+        private int GetPMXValue(Dictionary<int,int> map, int key)
+        {
+            if (map.ContainsKey(key))
+            {
+                key = GetPMXValue(map, map[key]);
+
+            }//&& ind1.Path.Count(x => x == ind1.Path[i]) > 1)
+
+            return key;
+           
+        }
+
+        private int GetPMXKey(Dictionary<int, int> map, int value)
+        {
+            if (map.ContainsValue(value))
+            {
+                value = GetPMXKey(map, map.FirstOrDefault(x => x.Value == value).Key);
+
+            }//&& ind2.Path.Count(x => x == individualValue) > 1)
+
+            return value;
+        }
+
 
         public static Individual GenerateIndividual(int size)
         {

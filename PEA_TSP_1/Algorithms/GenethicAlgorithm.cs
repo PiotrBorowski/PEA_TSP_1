@@ -36,13 +36,10 @@ namespace PEA_TSP_1.Algorithms
             int stopCounter = 0;
             Individual bestIndividual = Individual.GenerateIndividual(_graph.NumberOfCities);
             for (int i = 0; i < _stopCondition; i++)
-            {              
+            {
                 population.CrossOver();
                 population.Mutate();
-
-                var currentBest = population.NextGeneration();
-
-                population.CalculateWeight(_graph);
+                var currentBest = population.NextGeneration(_graph);
 
                 if (currentBest.CalculateWeight(_graph) < bestIndividual.CalculateWeight(_graph))
                 {
@@ -51,9 +48,15 @@ namespace PEA_TSP_1.Algorithms
                 }
                 else
                 {
-                    if (stopCounter == 100)
-                        //_mutationRate = 0.5f;
-                        return bestIndividual;
+                    switch (stopCounter)
+                    {
+                        case 100:
+                            _mutationRate = 0.8f;
+                            stopCounter = 0;
+                            break;
+                        case 120:
+                            return bestIndividual;
+                    }
                     stopCounter++;
                 }
             }
@@ -86,19 +89,20 @@ namespace PEA_TSP_1.Algorithms
 
         public void CalculateWeight(Graph graph)
         {
-            foreach (var individual in _population)
+            for (int i = 0; i < _population.Count; i++)
             {
-                individual.CalculateWeight(graph);
+                var ind = _population[i];
+                ind.CalculateWeight(graph);
             }
         }
 
         public void CrossOver()
         {
             //TODO: CROSSOVER STRATEGY
-            int iterations = _population.Count;
-            for (int i = 0; i < iterations - 1; ++i)
+            int iterations = _population.Count/2;
+            for (int i = 0; i < iterations ; ++i)
             {
-                for (int j = i+1; j < iterations-1; j++)
+                for (int j = i+1; j < iterations; j++)
                 {
                     var individual = _population[i];
                     var individual2 = _population[j];
@@ -116,15 +120,16 @@ namespace PEA_TSP_1.Algorithms
 
         public void Mutate()
         {
-            foreach (var individual in _population)
+            for (int i = 0; i < _population.Count; i++)
             {
-                individual.Mutate(_mutationRate);
+                var ind = _population[i];
+                ind.Mutate(_mutationRate);
             }
         }
 
-        public Individual NextGeneration()
+        public Individual NextGeneration(Graph graph)
         {
-            _population.OrderByDescending(x => x.Weight);
+            _population.OrderByDescending(x => x.CalculateWeight(graph));
             _population = new List<Individual>(_population.Take(_count));
 
             return new Individual(_population[0]);

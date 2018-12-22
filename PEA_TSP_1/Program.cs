@@ -13,8 +13,8 @@ namespace PEA_TSP_1
         static void Main(string[] args)
         {
             InstanceTestsDeviation(17, 39);
-            InstanceTestsDeviation(26, 937); //937
-            InstanceTestsDeviation(42, 699); //699
+            //InstanceTestsDeviation(26, 937); //937
+            //InstanceTestsDeviation(42, 699); //699
             InstanceTestsDeviation(52, 7542);
             InstanceTestsDeviation(120, 6942);
 
@@ -49,7 +49,7 @@ namespace PEA_TSP_1
             IAlgorithm algorithm;
 
 
-            algorithm = new GenethicAlgorithm(graph,0.8f,0.1f,5000){Name = $"GeneticAlgorithm{cities}"};
+            algorithm = new GenethicAlgorithm(graph,0.8f,0.1f,1000){Name = $"GeneticAlgorithm{cities}"};
             ComputeAndSaveDeviation(algorithm,refWeight,10);
         }
 
