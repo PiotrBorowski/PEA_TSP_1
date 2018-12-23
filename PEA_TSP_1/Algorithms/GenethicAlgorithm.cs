@@ -9,24 +9,26 @@ namespace PEA_TSP_1.Algorithms
     public class GenethicAlgorithm : IAlgorithm
     {
         private float _mutationRate;
-        private float _crossOverRate;
-        private int _stopCondition;
-        private Graph _graph;
+        private readonly float _crossOverRate;
+        private readonly int _stopCondition;
+        private readonly int _countOfIndividuals;
+        private readonly Graph _graph;
 
         public AlgorithmResult Result { get; private set; }
         public string Name { get; set; }
 
-        public GenethicAlgorithm(Graph graph, float mutationRate, float crossOverRate, int stopCondition)
+        public GenethicAlgorithm(Graph graph, int countOfIndividuals, float mutationRate, float crossOverRate, int stopCondition)
         {
             _mutationRate = mutationRate;
             _crossOverRate = crossOverRate;
             _stopCondition = stopCondition;
+            _countOfIndividuals = countOfIndividuals;
             _graph = graph;
         }
 
         public void Invoke()
         {
-            Population population = new Population(_graph.NumberOfCities, _graph.NumberOfCities, _mutationRate, _crossOverRate);
+            Population population = new Population(_graph.NumberOfCities, _countOfIndividuals, _mutationRate, _crossOverRate);
             population.CalculateWeight(_graph);
             Result = SearchBestResult(population);           
         }
@@ -34,12 +36,13 @@ namespace PEA_TSP_1.Algorithms
         private Individual SearchBestResult(Population population)
         {
             int stopCounter = 0;
+            bool consumption = false;
             Individual bestIndividual = Individual.GenerateIndividual(_graph.NumberOfCities);
             for (int i = 0; i < _stopCondition; i++)
             {
+                population.CrossOver();
                 population.Mutate();
 
-                population.CrossOver();
                 var currentBest = population.NextGeneration(_graph);
 
                 if (currentBest.CalculateWeight(_graph) < bestIndividual.CalculateWeight(_graph))
@@ -51,11 +54,16 @@ namespace PEA_TSP_1.Algorithms
                 {
                     switch (stopCounter)
                     {
-                        case 70:
-                            _mutationRate = 0.8f;
+                        case 30:
+                            if (!consumption)
+                            {
+                                _mutationRate = 0.8f;
+                                population.Count = population.Count *2/3;
+                                consumption = true;
+                            }
                             stopCounter = 0;
                             break;
-                        case 100:
+                        case 40:
                             return bestIndividual;
                     }
                     stopCounter++;
@@ -72,16 +80,22 @@ namespace PEA_TSP_1.Algorithms
         private List<Individual> _population;
         private readonly float _mutationRate;
         private readonly float _crossOverRate;
-        private readonly int _count;
+        private int _count;
 
         public Individual BestIndividual { get; private set; }
+
+        public int Count
+        {
+            get { return _count; }
+            set { _count = value; }
+        }
 
         public Population(int sizeOfIndividual, int count, float mutationRate, float crossOverRate)
         {
             _mutationRate = mutationRate;
             _crossOverRate = crossOverRate;
             _population = new List<Individual>();
-            _count = count;
+            Count = count;
             for (int i = 0; i < count; i++)
             {
                 _population.Add(Individual.GenerateIndividual(sizeOfIndividual));
@@ -130,7 +144,7 @@ namespace PEA_TSP_1.Algorithms
         public Individual NextGeneration(Graph graph)
         {
             var sorted =_population.OrderBy(x => x.CalculateWeight(graph));
-            _population = new List<Individual>(sorted.Take(_count));
+            _population = new List<Individual>(sorted.Take(Count));
 
             return new Individual(_population[0]);
         }
