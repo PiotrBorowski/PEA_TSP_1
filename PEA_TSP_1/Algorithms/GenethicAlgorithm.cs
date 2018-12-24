@@ -9,7 +9,7 @@ namespace PEA_TSP_1.Algorithms
     public class GenethicAlgorithm : IAlgorithm
     {
         private float _mutationRate;
-        private readonly float _crossOverRate;
+        private float _crossOverRate;
         private readonly int _stopCondition;
         private readonly int _countOfIndividuals;
         private readonly Graph _graph;
@@ -40,8 +40,10 @@ namespace PEA_TSP_1.Algorithms
             Individual bestIndividual = Individual.GenerateIndividual(_graph.NumberOfCities);
             for (int i = 0; i < _stopCondition; i++)
             {
+
                 population.CrossOver();
                 population.Mutate();
+
 
                 var currentBest = population.NextGeneration(_graph);
 
@@ -52,21 +54,21 @@ namespace PEA_TSP_1.Algorithms
                 }
                 else
                 {
-                    switch (stopCounter)
-                    {
-                        case 30:
-                            if (!consumption)
-                            {
-                                _mutationRate = 0.8f;
-                                population.Count = population.Count *2/3;
-                                consumption = true;
-                            }
-                            stopCounter = 0;
-                            break;
-                        case 40:
-                            return bestIndividual;
-                    }
                     stopCounter++;
+
+                   if (!consumption && stopCounter == _stopCondition/100*3)
+                   {
+                       _mutationRate = 0.9999f;
+                       _crossOverRate = 0.1f;
+                       population.Count = population.Count /2;
+                       consumption = true;
+                       stopCounter = 0;
+                   }
+                   else if(consumption && stopCounter == _stopCondition/100)
+                   {
+                       return bestIndividual;
+                   }
+
                 }
             }
 
