@@ -49,30 +49,34 @@ namespace PEA_TSP_1
             IAlgorithm algorithm;
 
             //strojenie CROSS = 0.7 BEST
-            //algorithm = new GenethicAlgorithm(graph, 30, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND30C07IT2000" };
+            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS07" };
             //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 30, 0.05f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}IND30C08IT2000" };
+            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.75f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS075" };
             //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 30, 0.05f, 0.9f, 2000) { Name = $"GeneticAlgorithm{cities}IND30C09IT2000" };
+            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS08" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.85f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS085" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.9f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS09" };
             //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
             //liczba osobnikow
-            algorithm = new GenethicAlgorithm(graph, 30, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND30C07IT2000OSOBNIKI" };
+            algorithm = new GenethicAlgorithm(graph, 80, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKI80" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 50, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND50C07IT2000OSOBNIKI" };
-            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+            algorithm = new GenethicAlgorithm(graph, 100, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKI100" };
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 70, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND70C07IT2000OSOBNIKI" };
-            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+            algorithm = new GenethicAlgorithm(graph, 120, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKI120" };
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities * 2, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}INDNX2" };
-            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+            algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKIN" };
+            ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 50, 0.05f, 0.8f,4000){Name = $"GeneticAlgorithm{cities}INDN" };
-            //ComputeAndSaveDeviation(algorithm,refWeight,10);
         }
 
         public static void Write(Graph graph)

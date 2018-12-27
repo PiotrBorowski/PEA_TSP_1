@@ -52,21 +52,21 @@ namespace PEA_TSP_1.Algorithms
                 {
                     stopCounter++;
 
-                    if (!consumption && stopCounter == _stopCondition / 100 * _stopCondition / 1000)
+                    if (!consumption && stopCounter == _stopCondition / 50)
                     {
                         population.MutationRate = 0.9f;
                         population.CrossOverRate = 0.05f;
                         consumption = true;
+                        //population.Count /= 2;
                         stopCounter = 0;
                     }
                     else
-                    if (consumption && stopCounter == _stopCondition / 100 * _stopCondition / 1000)
+                    if (consumption && stopCounter == _stopCondition / 10)
                     {
                         return bestIndividual;
                     }
 
                 }
-
 
                 population.CrossOver();
                 population.Mutate();
@@ -127,21 +127,25 @@ namespace PEA_TSP_1.Algorithms
 
         public void CrossOver()
         {
-            //TODO: CROSSOVER STRATEGY
+            Random rand = new Random();
             int iterations = _population.Count;
             for (int i = 0; i < iterations ; ++i)
             {
-                for (int j = i+1; j < iterations; j++)
-                {
-                    var individual = _population[i];
-                    var individual2 = _population[j];
+                var individual = _population[i];
 
-                    var childs = individual.CrossOver(individual2, CrossOverRate);
-                    if (childs.Item1 != null || childs.Item2 != null)
-                    {
-                        _population.Add(childs.Item1);
-                        _population.Add(childs.Item2);
-                    }
+                int index;
+                do
+                {
+                    index = rand.Next() % _population.Count;
+                } while (index == i);
+
+                var individual2 = _population[index];
+
+                var childs = individual.CrossOver(individual2, CrossOverRate);
+                if (childs.Item1 != null || childs.Item2 != null)
+                {
+                    _population.Add(childs.Item1);
+                    _population.Add(childs.Item2);
                 }
             }
         }
