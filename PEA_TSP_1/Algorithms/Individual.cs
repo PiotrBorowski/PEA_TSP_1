@@ -16,22 +16,27 @@ namespace PEA_TSP_1.Algorithms
         {
         }
 
-        public void Mutate(float probability)
+        public Individual Mutate(float probability)
         {
             Random random = new Random();
-            if (random.NextDouble() > probability)
-                return;
 
-            var index = random.Next() % Path.Count;
+            if (random.NextDouble() > probability)
+                return null;
+
+            var ind = new Individual(this);
+
+            var index = random.Next() % ind.Path.Count;
             int index2;
             do
             {
-                index2 = random.Next() % Path.Count;
+                index2 = random.Next() % ind.Path.Count;
             } while (index2 == index);
 
-            var temp = Path[index2];
-            Path[index2] = Path[index];
-            Path[index] = temp;
+            var temp = ind.Path[index2];
+            ind.Path[index2] = ind.Path[index];
+            ind.Path[index] = temp;
+
+            return ind;
         }
 
         public Tuple<Individual, Individual> CrossOver(Individual individual, float probability)

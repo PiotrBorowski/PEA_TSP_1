@@ -41,10 +41,6 @@ namespace PEA_TSP_1.Algorithms
             for (int i = 0; i < _stopCondition; i++)
             {
 
-                population.CrossOver();
-                population.Mutate();
-
-
                 var currentBest = population.NextGeneration(_graph);
 
                 if (currentBest.CalculateWeight(_graph) < bestIndividual.CalculateWeight(_graph))
@@ -56,20 +52,24 @@ namespace PEA_TSP_1.Algorithms
                 {
                     stopCounter++;
 
-                   if (!consumption && stopCounter == _stopCondition/100*3)
-                   {
-                       _mutationRate = 0.9999f;
-                       _crossOverRate = 0.1f;
-                       population.Count = population.Count /2;
-                       consumption = true;
-                       stopCounter = 0;
-                   }
-                   else if(consumption && stopCounter == _stopCondition/100)
-                   {
-                       return bestIndividual;
-                   }
+                    if (!consumption && stopCounter == _stopCondition / 100 * _stopCondition / 1000)
+                    {
+                        population.MutationRate = 0.9f;
+                        population.CrossOverRate = 0.05f;
+                        consumption = true;
+                        stopCounter = 0;
+                    }
+                    else
+                    if (consumption && stopCounter == _stopCondition / 100 * _stopCondition / 1000)
+                    {
+                        return bestIndividual;
+                    }
 
                 }
+
+
+                population.CrossOver();
+                population.Mutate();
             }
 
             return bestIndividual;
@@ -80,8 +80,8 @@ namespace PEA_TSP_1.Algorithms
     public class Population
     {
         private List<Individual> _population;
-        private readonly float _mutationRate;
-        private readonly float _crossOverRate;
+        private float _mutationRate;
+        private float _crossOverRate;
         private int _count;
 
         public Individual BestIndividual { get; private set; }
@@ -90,6 +90,18 @@ namespace PEA_TSP_1.Algorithms
         {
             get { return _count; }
             set { _count = value; }
+        }
+
+        public float MutationRate
+        {
+            get => _mutationRate;
+            set => _mutationRate = value;
+        }
+
+        public float CrossOverRate
+        {
+            get => _crossOverRate;
+            set => _crossOverRate = value;
         }
 
         public Population(int sizeOfIndividual, int count, float mutationRate, float crossOverRate)
@@ -116,7 +128,7 @@ namespace PEA_TSP_1.Algorithms
         public void CrossOver()
         {
             //TODO: CROSSOVER STRATEGY
-            int iterations = _population.Count/2;
+            int iterations = _population.Count;
             for (int i = 0; i < iterations ; ++i)
             {
                 for (int j = i+1; j < iterations; j++)
@@ -124,7 +136,7 @@ namespace PEA_TSP_1.Algorithms
                     var individual = _population[i];
                     var individual2 = _population[j];
 
-                    var childs = individual.CrossOver(individual2, _crossOverRate);
+                    var childs = individual.CrossOver(individual2, CrossOverRate);
                     if (childs.Item1 != null || childs.Item2 != null)
                     {
                         _population.Add(childs.Item1);
@@ -136,10 +148,14 @@ namespace PEA_TSP_1.Algorithms
 
         public void Mutate()
         {
-            for (int i = 0; i < _population.Count; i++)
+            int iterations = _population.Count;
+            for (int i = 0; i < iterations; i++)
             {
                 var ind = _population[i];
-                ind.Mutate(_mutationRate);
+                ind = ind.Mutate(MutationRate);
+
+                if(ind != null)
+                    _population.Add(ind);
             }
         }
 

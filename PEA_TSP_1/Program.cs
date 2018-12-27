@@ -13,10 +13,10 @@ namespace PEA_TSP_1
         static void Main(string[] args)
         {
             //InstanceTestsDeviation(17, 39);
-            InstanceTestsDeviation(26, 937); //937
+            //InstanceTestsDeviation(26, 937); //937
             //InstanceTestsDeviation(42, 699); //699
             InstanceTestsDeviation(52, 7542);
-            InstanceTestsDeviation(120, 6942);
+            //InstanceTestsDeviation(120, 6942);
 
             //InstanceTestsDeviation(48, 10628); //10628
             Console.Read();
@@ -48,12 +48,31 @@ namespace PEA_TSP_1
 
             IAlgorithm algorithm;
 
+            //strojenie CROSS = 0.7 BEST
+            //algorithm = new GenethicAlgorithm(graph, 30, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND30C07IT2000" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            algorithm = new GenethicAlgorithm(graph, 200, 0.01f, 0.8f, 4000) { Name = $"GeneticAlgorithm{cities}INDNX2" };
+            //algorithm = new GenethicAlgorithm(graph, 30, 0.05f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}IND30C08IT2000" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, 30, 0.05f, 0.9f, 2000) { Name = $"GeneticAlgorithm{cities}IND30C09IT2000" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //liczba osobnikow
+            algorithm = new GenethicAlgorithm(graph, 30, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND30C07IT2000OSOBNIKI" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.01f, 0.8f,8000){Name = $"GeneticAlgorithm{cities}INDN" };
-            ComputeAndSaveDeviation(algorithm,refWeight,10);
+            //algorithm = new GenethicAlgorithm(graph, 50, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND50C07IT2000OSOBNIKI" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, 70, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND70C07IT2000OSOBNIKI" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities * 2, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}INDNX2" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, 50, 0.05f, 0.8f,4000){Name = $"GeneticAlgorithm{cities}INDN" };
+            //ComputeAndSaveDeviation(algorithm,refWeight,10);
         }
 
         public static void Write(Graph graph)
@@ -123,7 +142,7 @@ namespace PEA_TSP_1
         public static void ComputeAndSaveDeviation(IAlgorithm algorithm, int refWeight, int iterations)
         {
             //using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
-            //{
+            {
                 long timeSum = 0;
                 var results = new List<int>();
                 for (int i = 0; i < iterations; i++)
@@ -142,7 +161,7 @@ namespace PEA_TSP_1
                     Console.WriteLine();
                     results.Add(algorithm.Result.Weight);
                 }
-                //writer.WriteLine("Deviation");
+               // writer.WriteLine("Deviation");
                 Console.WriteLine("Deviation");
                 float sum = 0;
                 foreach (var result in results)
@@ -150,17 +169,17 @@ namespace PEA_TSP_1
                     sum += (result - refWeight) * 100f / refWeight;
                 }
                 sum /= results.Count;
-                //writer.WriteLine(sum + "%");
+               // writer.WriteLine(sum + "%");
                 Console.WriteLine(sum + "%");
 
                 //writer.WriteLine("Average Time:");
                 Console.WriteLine("Average Time:");
-                //writer.WriteLine(timeSum / iterations);
+               // writer.WriteLine(timeSum / iterations);
                 Console.WriteLine(timeSum / iterations);
-                //writer.WriteLine();
+               // writer.WriteLine();
                 Console.WriteLine();
-                //writer.Close();
-            //}
+               // writer.Close();
+            }
         }
     }
 }
