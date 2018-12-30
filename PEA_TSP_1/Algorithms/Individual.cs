@@ -23,7 +23,7 @@ namespace PEA_TSP_1.Algorithms
             if (random.NextDouble() > probability)
                 return null;
 
-            var ind = new Individual(this);
+            var ind = this;// new Individual(this);
 
             var index = random.Next() % ind.Path.Count;
             int index2;
@@ -39,7 +39,32 @@ namespace PEA_TSP_1.Algorithms
             return ind;
         }
 
-        public Tuple<Individual, Individual> CrossOver(Individual individual, float probability)
+        public void MutateInversion(float probability)
+        {
+            Random random = new Random();
+
+            if (random.NextDouble() > probability)
+                return;
+
+            var ind = this;// new Individual(this);
+
+            var index = random.Next() % ind.Path.Count/2;
+            int index2 = random.Next() % ind.Path.Count/2 + ind.Path.Count/2;
+
+            var path = ind.Path;
+            var toReverse = path.GetRange(index, index2 - index + 1);
+
+            toReverse.Reverse();
+
+            for (int i = 0; i < index2-index+1; i++)
+            {
+                path[index + i] = toReverse[i];
+            }
+
+            ind.Path = path;
+        }
+
+        public Tuple<Individual, Individual> CrossOverOX(Individual individual, float probability)
         {
             Random random = new Random();
             if (random.NextDouble() > probability)
@@ -47,6 +72,74 @@ namespace PEA_TSP_1.Algorithms
 
             int index1 = Path.Count / 3;
             int index2 = Path.Count * 2 / 3;
+
+            Individual ind1 = new Individual(this);
+            Individual ind2 = new Individual(individual);
+
+            int[] child1 = new int[Path.Count];
+            int[] child2 = new int[Path.Count];
+            List<int> middle1 = new List<int>();
+            List <int> middle2 = new List<int>();
+            //zamiana srodkowych czesci
+            for (int i = index1; i < index2 + 1; i++)
+            {
+                child1[i] = ind2.Path[i];
+                child2[i] = ind1.Path[i];
+                middle1.Add(ind2.Path[i]);
+                middle2.Add(ind1.Path[i]);
+            }
+
+            int parentindex = index2 + 1;
+            int childindex = parentindex;
+            int value;
+            for (int i = 0; i < Path.Count; i++)
+            {
+                value = ind1.Path[parentindex];
+                if (!middle1.Contains(value))
+                {
+                    child1[childindex] = value;
+                    childindex++;
+                    if (childindex == Path.Count)
+                        childindex = 0;
+                }
+
+                parentindex++;
+                if (parentindex == Path.Count)
+                    parentindex = 0;
+            }
+
+            parentindex = index2 + 1;
+            childindex = parentindex;
+            for (int i = 0; i < Path.Count; i++)
+            {
+                value = ind2.Path[parentindex];
+                if (!middle2.Contains(value))
+                {
+                    child2[childindex] = value;
+                    childindex++;
+                    if (childindex == Path.Count)
+                        childindex = 0;
+                }
+
+                parentindex++;
+                if (parentindex == Path.Count)
+                    parentindex = 0;
+            }
+
+            Individual child1Individual = new Individual{Path = child1.ToList()};
+            Individual child2Individual = new Individual{Path = child2.ToList()};
+
+            return new Tuple<Individual, Individual>(child1Individual, child2Individual);
+        }
+
+        public Tuple<Individual, Individual> CrossOver(Individual individual, float probability)
+        {
+            Random random = new Random();
+            if (random.NextDouble() > probability)
+                return new Tuple<Individual, Individual>(null, null);
+
+            int index1 = random.Next() % (Path.Count / 2);
+            int index2 = random.Next() % (Path.Count / 2) + Path.Count / 2;
 
             Dictionary<int, int> map = new Dictionary<int, int>();
 

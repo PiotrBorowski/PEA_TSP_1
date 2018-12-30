@@ -12,11 +12,13 @@ namespace PEA_TSP_1
     {
         static void Main(string[] args)
         {
-            //InstanceTestsDeviation(17, 39);
-            //InstanceTestsDeviation(26, 937); //937
-            //InstanceTestsDeviation(42, 699); //699
+            InstanceTestsDeviation(17, 39);
+            InstanceTestsDeviation(26, 937); //937
+            InstanceTestsDeviation(42, 699); //699
             InstanceTestsDeviation(52, 7542);
-            //InstanceTestsDeviation(120, 6942);
+            InstanceTestsDeviation(100, 36230);
+            InstanceTestsDeviation(120, 6942);
+            InstanceTestsDeviation(171, 2755);
 
             //InstanceTestsDeviation(48, 10628); //10628
             Console.Read();
@@ -48,33 +50,64 @@ namespace PEA_TSP_1
 
             IAlgorithm algorithm;
 
-            //strojenie CROSS = 0.7 BEST
-            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS07" };
+            ////strojenie CROSS = 0.8 / 0.85 BEST
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.05f, 0.7f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000CROSS07" };
             //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.75f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS075" };
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.05f, 0.75f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000CROSS075" };
             //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS08" };
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.05f, 0.8f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000CROSS08" };
             //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.85f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS085" };
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.05f, 0.85f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000CROSS085" };
             //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //algorithm = new GenethicAlgorithm(graph, 100, 0.05f, 0.9f, 2000) { Name = $"GeneticAlgorithm{cities}IND30IT2000CROSS09" };
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.05f, 0.9f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000CROSS09" };
             //ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            //liczba osobnikow
-            algorithm = new GenethicAlgorithm(graph, 80, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKI80" };
+            ////mutacje 0.1 BEST
+            //algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.05f, 0.9f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000MUT005" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.1f, 0.9f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000MUT01" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.15f, 0.9f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000MUT015" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            ////liczba osobnikow N BEST
+            //algorithm = new GenethicAlgorithm(graph, 80, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000OSOBNIKI80" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, 100, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000OSOBNIKI100" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithmOX{cities}2000OSOBNIKI120" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities*2, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKI2N" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //TESTY
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.15f, 0.9f, 2000) { Name = $"GeneticAlgorithm{cities}IT2000OX" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.15f, 0.9f, 4000) { Name = $"GeneticAlgorithm{cities}IT4000OX" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.15f, 0.9f, 8000) { Name = $"GeneticAlgorithm{cities}IT8000OX" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+            //algorithm = new GenethicAlgorithm(graph, 120, 0.15f, 0.9f, 16000) { Name = $"GeneticAlgorithm{cities}IT16000OX" };
+            //ComputeAndSaveDeviation(algorithm, refWeight, 10);
+
+            algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}IT2000" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
-            algorithm = new GenethicAlgorithm(graph, 100, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKI100" };
+            algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.1f, 0.8f, 4000) { Name = $"GeneticAlgorithm{cities}IT4000" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
-
-            algorithm = new GenethicAlgorithm(graph, 120, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKI120" };
+            algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.1f, 0.8f, 8000) { Name = $"GeneticAlgorithm{cities}IT8000" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
-
-            algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.1f, 0.8f, 2000) { Name = $"GeneticAlgorithm{cities}2000OSOBNIKIN" };
+            algorithm = new GenethicAlgorithm(graph, graph.NumberOfCities, 0.1f, 0.8f, 16000) { Name = $"GeneticAlgorithm{cities}IT16000" };
             ComputeAndSaveDeviation(algorithm, refWeight, 10);
 
         }
@@ -145,7 +178,7 @@ namespace PEA_TSP_1
 
         public static void ComputeAndSaveDeviation(IAlgorithm algorithm, int refWeight, int iterations)
         {
-            //using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
+            using (StreamWriter writer = new StreamWriter(algorithm.Name + ".txt"))
             {
                 long timeSum = 0;
                 var results = new List<int>();
@@ -156,7 +189,7 @@ namespace PEA_TSP_1
                     timeSum += time;
                     Console.WriteLine("Time");
                     Console.WriteLine(time);
-                    //writer.WriteLine(time);
+                    writer.WriteLine(time);
 
                     Console.WriteLine("Path:");
                     Write(algorithm.Result.Path);
@@ -165,7 +198,7 @@ namespace PEA_TSP_1
                     Console.WriteLine();
                     results.Add(algorithm.Result.Weight);
                 }
-               // writer.WriteLine("Deviation");
+                writer.WriteLine("Deviation");
                 Console.WriteLine("Deviation");
                 float sum = 0;
                 foreach (var result in results)
@@ -173,16 +206,16 @@ namespace PEA_TSP_1
                     sum += (result - refWeight) * 100f / refWeight;
                 }
                 sum /= results.Count;
-               // writer.WriteLine(sum + "%");
+                writer.WriteLine(sum + "%");
                 Console.WriteLine(sum + "%");
 
-                //writer.WriteLine("Average Time:");
+                writer.WriteLine("Average Time:");
                 Console.WriteLine("Average Time:");
-               // writer.WriteLine(timeSum / iterations);
+                writer.WriteLine(timeSum / iterations);
                 Console.WriteLine(timeSum / iterations);
-               // writer.WriteLine();
+                writer.WriteLine();
                 Console.WriteLine();
-               // writer.Close();
+                writer.Close();
             }
         }
     }

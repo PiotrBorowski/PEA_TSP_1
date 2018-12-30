@@ -41,6 +41,9 @@ namespace PEA_TSP_1.Algorithms
             for (int i = 0; i < _stopCondition; i++)
             {
 
+                population.Mutate();
+                population.CrossOver();
+
                 var currentBest = population.NextGeneration(_graph);
 
                 if (currentBest.CalculateWeight(_graph) < bestIndividual.CalculateWeight(_graph))
@@ -52,24 +55,22 @@ namespace PEA_TSP_1.Algorithms
                 {
                     stopCounter++;
 
-                    if (!consumption && stopCounter == _stopCondition / 50)
+                    if (!consumption && stopCounter == _stopCondition/10)
                     {
-                        population.MutationRate = 0.9f;
-                        population.CrossOverRate = 0.05f;
+                        population.MutationRate = 0.8f;
+                        //population.CrossOverRate = 0.5f;
                         consumption = true;
                         //population.Count /= 2;
                         stopCounter = 0;
                     }
                     else
-                    if (consumption && stopCounter == _stopCondition / 10)
+                    if (consumption && stopCounter == _stopCondition/20)
                     {
                         return bestIndividual;
                     }
 
                 }
 
-                population.CrossOver();
-                population.Mutate();
             }
 
             return bestIndividual;
@@ -136,12 +137,12 @@ namespace PEA_TSP_1.Algorithms
                 int index;
                 do
                 {
-                    index = rand.Next() % _population.Count;
+                    index = rand.Next() % _population.Count/2;
                 } while (index == i);
 
                 var individual2 = _population[index];
 
-                var childs = individual.CrossOver(individual2, CrossOverRate);
+                var childs = individual.CrossOver(individual2, _crossOverRate);
                 if (childs.Item1 != null || childs.Item2 != null)
                 {
                     _population.Add(childs.Item1);
@@ -156,17 +157,30 @@ namespace PEA_TSP_1.Algorithms
             for (int i = 0; i < iterations; i++)
             {
                 var ind = _population[i];
-                ind = ind.Mutate(MutationRate);
-
-                if(ind != null)
-                    _population.Add(ind);
+                //ind = ind.Mutate(_mutationRate);
+                ind.Mutate(_mutationRate);
+                //if (ind != null)
+                //{
+                //    _population.Add(ind);
+                //}
             }
         }
 
         public Individual NextGeneration(Graph graph)
         {
-            var sorted =_population.OrderBy(x => x.CalculateWeight(graph));
-            _population = new List<Individual>(sorted.Take(Count));
+            var sorted =_population.Take(Count).OrderBy(x => x.CalculateWeight(graph));
+            var children = _population.Skip(Count).Take(Count).OrderBy(x => x.CalculateWeight(graph));
+            //int count = Count / 5;
+            //_population = new List<Individual>(sorted.Take(Count - count));
+            //_population.AddRange(sorted.TakeLast(count));
+            _population = new List<Individual>(children);
+            if (children.Count() < Count)
+            {
+                _population.AddRange(sorted.Take(Count - children.Count()));
+                sorted = _population.OrderBy(x => x.CalculateWeight(graph));
+                _population = new List<Individual>(sorted);
+            }
+
 
             return new Individual(_population[0]);
         }
